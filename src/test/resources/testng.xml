@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<suite name="Suite" parallel="tests" thread-count="2">
+
+    <test name="Pixel 8 Android 15">
+        <parameter name="platformName" value="Android"/>
+        <parameter name="platformVersion" value="15"/>
+        <parameter name="deviceName" value="Pixel8Android15"/>
+        <parameter name="udid" value="emulator-5554"/>
+        <parameter name="systemPort" value="10000"/>
+        <parameter name="chromeDriverPort" value="20000"/>
+        <parameter name="appiumPort" value="4723"/>
+        <classes>
+            <class name="com.qa.runners.MyAndroidRunnerTest"/>
+        </classes>
+    </test>
+
+    <test name="iPhone 17 iOS 262">
+        <parameter name="platformName" value="iOS"/>
+        <parameter name="platformVersion" value="26.2"/>
+        <parameter name="deviceName" value="iPhone 17"/>
+        <parameter name="udid" value="7EEF215B-157F-461B-8005-ED0A1EA0A797"/>
+        <parameter name="wdaLocalPort" value="10003"/>
+        <parameter name="webkitDebugProxyPort" value="20003"/>
+        <parameter name="appiumPort" value="4725"/>
+        <classes>
+            <class name="com.qa.runners.MyiOSRunnerTest"/>
+        </classes>
+    </test>
+
+</suite>
