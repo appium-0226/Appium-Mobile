@@ -66,12 +66,21 @@ public class BasePage {
     public void sendKeys(WebElement e, String txt) {
         waitForVisibility(e);
         e.sendKeys(txt);
+        if (isIOS()) {
+            Dimension size = driver.manage().window().getSize();
+            swipe(size.width / 5, size.height / 8, size.width / 5, size.height / 8, 100);
+        }
     }
 
     public void sendKeys(WebElement e, String txt, String msg) {
         waitForVisibility(e);
         TestUtils.log().info(msg);
         e.sendKeys(txt);
+        if (isIOS()) {
+            // Click above the keyboard area to dismiss it
+            Dimension size = driver.manage().window().getSize();
+            swipe(size.width / 2, size.height / 4, size.width / 2, size.height / 4, 100);
+        }
     }
 
     public String getAttribute(WebElement e, String attribute) {
@@ -204,6 +213,18 @@ public class BasePage {
                 .addAction(finger.createPointerMove(Duration.ofMillis(duration), PointerInput.Origin.viewport(), endX, endY))
                 .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
         driver.perform(List.of(swipe));
+    }
+
+    public boolean isIOS() {
+        return new GlobalParams().getPlatformName().equalsIgnoreCase("iOS");
+    }
+
+    public void scrollDown() {
+        Dimension size = driver.manage().window().getSize();
+        int startX = size.width / 2;
+        int startY = (int) (size.height * 0.8);
+        int endY = (int) (size.height * 0.2);
+        swipe(startX, startY, startX, endY, 1000);
     }
 
 }

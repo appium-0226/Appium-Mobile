@@ -10,21 +10,21 @@ public class LoginPage extends BasePage {
 
     TestUtils utils = new TestUtils();
 
-    @AndroidFindBy(accessibility = "test-Username")
-    @iOSXCUITFindBy(id = "test-Username")
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_login_username\")")
+    @iOSXCUITFindBy(id = "input_login_username")
     private WebElement usernameTxtFld;
 
-    @AndroidFindBy(accessibility = "test-Password")
-    @iOSXCUITFindBy(id = "test-Password")
+    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_login_password\")")
+    @iOSXCUITFindBy(id = "input_login_password")
     private WebElement passwordTxtFld;
 
-    @AndroidFindBy(accessibility = "test-LOGIN")
-    @iOSXCUITFindBy(id = "test-LOGIN")
+    @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.view.View\").instance(1)")
+    @iOSXCUITFindBy(accessibility = "btn_login")
     private WebElement loginBtn;
 
-    @AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-Error message\"]/android.widget.TextView")
-    @iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-Error message\"]/child::XCUIElementTypeStaticText")
-    private WebElement errTxt;
+    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Don't have an account? Register\")")
+    @iOSXCUITFindBy(accessibility = "btn_go_register")
+    private WebElement registerLink;
 
     public LoginPage() {
     }
@@ -43,5 +43,14 @@ public class LoginPage extends BasePage {
         loginBtn.click();
 
     }
+
+    public void clickRegisterLink() {
+        registerLink.click();
+    }
+
+    public void toLoginPage() {
+        usernameTxtFld.isDisplayed();
+        passwordTxtFld.isDisplayed();
+     }
 
 }

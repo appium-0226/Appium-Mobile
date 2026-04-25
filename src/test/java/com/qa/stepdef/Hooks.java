@@ -13,6 +13,7 @@ public class Hooks {
 
     @Before
     public void initialize() throws Exception {
+        com.qa.utils.DBManager.initialize();
         new VideoManager().startRecording();
     }
 
@@ -20,9 +21,10 @@ public class Hooks {
     public void quit(Scenario scenario) {
         new VideoManager().stopRecording(scenario);
 
-        if (scenario.isFailed()){
+        if (scenario.isFailed()) {
             try {
-                byte[] screenshot = new DriverManager().getDriver().getScreenshotAs(org.openqa.selenium.OutputType.BYTES);
+                byte[] screenshot = new DriverManager().getDriver()
+                        .getScreenshotAs(org.openqa.selenium.OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", scenario.getName());
             } catch (Exception e) {
                 System.err.println("Gagal mengambil screenshot: " + e.getMessage());
