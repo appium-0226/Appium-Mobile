@@ -6,21 +6,28 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import com.qa.utils.ScenarioContext;
 
 public class LoginStep {
 
-    @When("I enter username as {string}")
-    public void iEnterUsernameAs(String username) throws InterruptedException {
+    @When("Input Username as {string}")
+    public void inputUsername(String username) throws InterruptedException {
+        if (username.equalsIgnoreCase("RegisteredAccount")) {
+            username = ScenarioContext.getLastUsername();
+        }
         new LoginPage().enterUserName(username);
     }
 
-    @When("I enter password as {string}")
-    public void iEnterPasswordAs(String password) {
+    @When("Input Password as {string}")
+    public void inputPassword(String password) {
+        if (password.equalsIgnoreCase("RegisteredAccount")) {
+            password = ScenarioContext.getLastPassword();
+        }
         new LoginPage().enterPassword(password);
     }
 
-    @And("I click login button")
-    public void  iClickLoginButton() {
+    @And("Click Login Button")
+    public void clickLoginButton() {
         new LoginPage().clickLogin();
     }
 

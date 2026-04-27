@@ -30,13 +30,11 @@ public class LoginPage extends BasePage {
     }
 
     public void enterUserName(String username) throws InterruptedException {
-        clear(usernameTxtFld);
-        sendKeys(usernameTxtFld, username, "login with " + username);
+        sendKeys(usernameTxtFld, username);
     }
 
     public void enterPassword(String password) {
-        clear(passwordTxtFld);
-        sendKeys(passwordTxtFld, password, "password is " + password);
+        sendKeys(passwordTxtFld, password);
     }
 
     public void clickLogin() {

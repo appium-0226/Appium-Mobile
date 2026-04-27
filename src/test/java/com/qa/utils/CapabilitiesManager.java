@@ -56,6 +56,8 @@ public class CapabilitiesManager {
                             .setWdaLocalPort(Integer.parseInt(params.getWdLocalPort()));
 
                     iosOptions.setCapability("webkitDebugProxyPort", Integer.parseInt(params.getWebkitDebugProxyPort()));
+                    iosOptions.setCapability("sendKeyStrategy", "setValue"); // Direct input instead of typing
+                    iosOptions.setCapability("maxTypingFrequency", 30);     // Slower typing speed if strategy fails
                     iosOptions.setApp(iOSAppUrl);
 
                     return iosOptions;
