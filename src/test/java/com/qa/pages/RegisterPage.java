@@ -1,54 +1,65 @@
 package com.qa.pages;
 
 import com.qa.utils.TestUtils;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 public class RegisterPage extends BasePage {
 
     TestUtils utils = new TestUtils();
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_name\")")
-    @iOSXCUITFindBy(accessibility = "input_name")
-    private WebElement fullNameField;
+    private final By fullNameField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_name\")"),
+            AppiumBy.accessibilityId("input_name")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_phone\")")
-    @iOSXCUITFindBy(accessibility = "input_phone")
-    private WebElement phoneField;
+    private final By phoneField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_phone\")"),
+            AppiumBy.accessibilityId("input_phone")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"radio_Male\")")
-    @iOSXCUITFindBy(accessibility = "radio_Male")
-    private WebElement maleGender;
+    private final By maleGender = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"radio_Male\")"),
+            AppiumBy.accessibilityId("radio_Male")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"radio_Female\")")
-    @iOSXCUITFindBy(accessibility = "radio_Female")
-    private WebElement femaleGender;
+    private final By femaleGender = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"radio_Female\")"),
+            AppiumBy.accessibilityId("radio_Female")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_username\")")
-    @iOSXCUITFindBy(accessibility = "input_username")
-    private WebElement usernameField;
+    private final By usernameField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_username\")"),
+            AppiumBy.accessibilityId("input_username")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_password\")")
-    @iOSXCUITFindBy(accessibility = "input_password")
-    private WebElement passwordField;
+    private final By passwordField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_password\")"),
+            AppiumBy.accessibilityId("input_password")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_confirm_password\")")
-    @iOSXCUITFindBy(accessibility = "input_confirm_password")
-    private WebElement confirmPasswordField;
+    private final By confirmPasswordField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_confirm_password\")"),
+            AppiumBy.accessibilityId("input_confirm_password")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().className(\"android.view.View\").instance(1)")
-    @iOSXCUITFindBy(accessibility = "btn_register")
-    private WebElement registerButton;
+    private final By registerButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().className(\"android.view.View\").instance(1)"),
+            AppiumBy.accessibilityId("btn_register")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Already have an account? Login\")")
-    @iOSXCUITFindBy(accessibility = "btn_go_login")
-    private WebElement loginLink;
+    private final By loginLink = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Already have an account? Login\")"),
+            AppiumBy.accessibilityId("btn_go_login")
+    );
 
     public RegisterPage() {
     }
 
-    public void inputFullName(String username) throws InterruptedException {
+    public void inputFullName(String username)  {
         sendKeys(fullNameField, username);
     }
 
@@ -58,9 +69,9 @@ public class RegisterPage extends BasePage {
 
     public void selectGender(String gender) {
         if (gender.equalsIgnoreCase("Male")) {
-            maleGender.click();
+            click(maleGender);
         } else if (gender.equalsIgnoreCase("Female")) {
-            femaleGender.click();
+            click(femaleGender);
         }
     }
 
@@ -77,11 +88,11 @@ public class RegisterPage extends BasePage {
     }
 
     public void clickRegister() {
-        registerButton.click();
+        click(registerButton);
     }
 
     public void clickLoginLink() {
-        loginLink.click();
+        click(loginLink);
     }
 
 }

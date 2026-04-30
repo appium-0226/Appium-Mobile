@@ -9,6 +9,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
 
+import com.qa.utils.DataGeneratorUtil;
+
 import java.util.Map;
 
 public class AddressStep {
@@ -16,17 +18,8 @@ public class AddressStep {
     @And("Verify Address deleted from database")
     public void verifyAddressDeletedFromDatabase() throws Exception {
         String street = ScenarioContext.getLastStreet();
-        String query = "SELECT * FROM addresses WHERE street = '" + street + "'";
-        java.sql.ResultSet rs = com.qa.utils.DBManager.executeQuery(query);
-
-        // Assert bahwa data TIDAK ditemukan (rs.next() harus false)
+        java.sql.ResultSet rs = com.qa.utils.DBManager.getAddressByStreet(street);
         Assert.assertFalse(rs.next(), "Data alamat dengan jalan '" + street + "' masih ditemukan di database (gagal hapus)!");
-
-        System.out.println("==========================================");
-        System.out.println("VALIDASI DELETE ALAMAT SUCCESS (DB)");
-        System.out.println("==========================================");
-        System.out.println("Address with street '" + street + "' is NOT found in DB as expected.");
-        System.out.println("==========================================");
     }
 
     @Then("Verify Address deleted from Address List")
@@ -42,39 +35,22 @@ public class AddressStep {
     @And("Verify Updated Address data in database")
     public void verifyUpdatedAddressInDatabase() throws Exception {
         String street = ScenarioContext.getLastStreet();
-        String userQuery = "SELECT * FROM addresses WHERE street = '" + street + "'";
-        java.sql.ResultSet rs = com.qa.utils.DBManager.executeQuery(userQuery);
-
+        java.sql.ResultSet rs = com.qa.utils.DBManager.getAddressByStreet(street);
         Assert.assertTrue(rs.next(), "Address with street '" + street + "' not found in database!");
-
         Assert.assertEquals(rs.getString("label"), ScenarioContext.getlastAddressLabel());
         Assert.assertEquals(rs.getString("street"), ScenarioContext.getLastStreet());
         Assert.assertEquals(rs.getString("city"), ScenarioContext.getLastCity());
         Assert.assertEquals(rs.getString("postal_code"), ScenarioContext.getLastPostalCode());
-
         TestUtils.log().info("Database validation successful for address: " + street);
     }
 
     @Then("Verify Updated Address show in Address List with correct data")
     public void verifyUpdatedAddressInList() {
         Map<String, String> uiData = new AddressPage().getNewAddressData();
-
         String expectedLabel = ScenarioContext.getlastAddressLabel();
         String expectedStreet = ScenarioContext.getLastStreet();
         String expectedCity = ScenarioContext.getLastCity();
         String expectedPostalCode = ScenarioContext.getLastPostalCode();
-
-        System.out.println("==========================================");
-        System.out.println("VALIDASI DATA ALAMAT BARU (UI vs INPUT DATA)");
-        System.out.println("==========================================");
-        System.out.println("Field       | UI Value           | Expected Value");
-        System.out.println("------------------------------------------");
-        System.out.println("Label       | " + uiData.get("label") + " | " + expectedLabel);
-        System.out.println("Street      | " + uiData.get("street") + " | " + expectedStreet);
-        System.out.println("City        | " + uiData.get("city") + " | " + expectedCity);
-        System.out.println("Postal Code | " + uiData.get("postalCode") + " | " + expectedPostalCode);
-        System.out.println("==========================================");
-
         Assert.assertEquals(uiData.get("label"), expectedLabel);
         Assert.assertEquals(uiData.get("street"), expectedStreet);
         Assert.assertEquals(uiData.get("city"), expectedCity);
@@ -87,46 +63,29 @@ public class AddressStep {
     }
 
     @When("Click Edit Button on first address in Address List")
-    public void clickEditButton() throws InterruptedException {
+    public void clickEditButton()  {
         new AddressPage().clickEditFirstAddress();
     }
 
     @And("Verify New Address data in database")
     public void verifyNewAddressInDatabase() throws Exception {
         String street = ScenarioContext.getLastStreet();
-        String userQuery = "SELECT * FROM addresses WHERE street = '" + street + "'";
-        java.sql.ResultSet rs = com.qa.utils.DBManager.executeQuery(userQuery);
-
+        java.sql.ResultSet rs = com.qa.utils.DBManager.getAddressByStreet(street);
         Assert.assertTrue(rs.next(), "Address with street '" + street + "' not found in database!");
-
         Assert.assertEquals(rs.getString("label"), ScenarioContext.getlastAddressLabel());
         Assert.assertEquals(rs.getString("street"), ScenarioContext.getLastStreet());
         Assert.assertEquals(rs.getString("city"), ScenarioContext.getLastCity());
         Assert.assertEquals(rs.getString("postal_code"), ScenarioContext.getLastPostalCode());
-
         TestUtils.log().info("Database validation successful for address: " + street);
     }
 
     @Then("Verify New Address show in Address List with correct data")
-    public void verifyNewAddressInList() throws InterruptedException {
+    public void verifyNewAddressInList()  {
         Map<String, String> uiData = new AddressPage().getNewAddressData();
-        
         String expectedLabel = ScenarioContext.getlastAddressLabel();
         String expectedStreet = ScenarioContext.getLastStreet();
         String expectedCity = ScenarioContext.getLastCity();
         String expectedPostalCode = ScenarioContext.getLastPostalCode();
-
-        System.out.println("==========================================");
-        System.out.println("VALIDASI DATA ALAMAT BARU (UI vs INPUT DATA)");
-        System.out.println("==========================================");
-        System.out.println("Field       | UI Value           | Expected Value");
-        System.out.println("------------------------------------------");
-        System.out.println("Label       | " + uiData.get("label") + " | " + expectedLabel);
-        System.out.println("Street      | " + uiData.get("street") + " | " + expectedStreet);
-        System.out.println("City        | " + uiData.get("city") + " | " + expectedCity);
-        System.out.println("Postal Code | " + uiData.get("postalCode") + " | " + expectedPostalCode);
-        System.out.println("==========================================");
-
         Assert.assertEquals(uiData.get("label"), expectedLabel);
         Assert.assertEquals(uiData.get("street"), expectedStreet);
         Assert.assertEquals(uiData.get("city"), expectedCity);
@@ -134,48 +93,64 @@ public class AddressStep {
     }
 
     @And("Click Add Address Button")
-    public void clickAddAddressButton() throws InterruptedException {
+    public void clickAddAddressButton()  {
         new AddressPage().clickAddAddress();
     }
 
     @And("Input Postal Code with {string}")
-    public void inputPostalCode(String postalCode) throws InterruptedException {
-        if (postalCode.equalsIgnoreCase("RandomPostalCode")) {
-            postalCode = new AddressPage().generateRandomPostalCode();
-        }
+    public void inputPostalCode(String postalCode)  {
+        ScenarioContext.setLastPostalCode(postalCode);
+        new AddressPage().inputPostalCode(postalCode);
+    }
+
+    @And("Input a random Postal Code")
+    public void inputRandomPostalCode()  {
+        String postalCode = DataGeneratorUtil.generateRandomPostalCode();
         ScenarioContext.setLastPostalCode(postalCode);
         new AddressPage().inputPostalCode(postalCode);
     }
 
     @And("Input City with {string}")
-    public void inputCity(String city) throws InterruptedException {
-        if (city.equalsIgnoreCase("RandomCity")) {
-            city = new AddressPage().generateRandomCity();
-        }
+    public void inputCity(String city)  {
+        ScenarioContext.setLastCity(city);
+        new AddressPage().inputCity(city);
+    }
+
+    @And("Input a random City")
+    public void inputRandomCity()  {
+        String city = DataGeneratorUtil.generateRandomCity();
         ScenarioContext.setLastCity(city);
         new AddressPage().inputCity(city);
     }
 
     @And("Input Street with {string}")
-    public void inputStreet(String street) throws InterruptedException {
-        if (street.equalsIgnoreCase("RandomStreet")) {
-            street = new AddressPage().generateRandomStreet();
-        }
+    public void inputStreet(String street)  {
+        ScenarioContext.setLastStreet(street);
+        new AddressPage().inputStreet(street);
+    }
+
+    @And("Input a random Street")
+    public void inputRandomStreet()  {
+        String street = DataGeneratorUtil.generateRandomStreet();
         ScenarioContext.setLastStreet(street);
         new AddressPage().inputStreet(street);
     }
 
     @When("Input Label with {string}")
-    public void inputLabel(String label) throws InterruptedException {
-        if (label.equalsIgnoreCase("RandomLabel")) {
-            label = "Address-" + new AddressPage().generateRandomNumber(3);
-        }
-        ScenarioContext.setlastAddressLabel(label);
+    public void inputLabel(String label)  {
+        ScenarioContext.setLastAddressLabel(label);
+        new AddressPage().inputLabel(label);
+    }
+
+    @When("Input a random Label")
+    public void inputRandomLabel()  {
+        String label = "Address-" + DataGeneratorUtil.generateRandomNumber(3);
+        ScenarioContext.setLastAddressLabel(label);
         new AddressPage().inputLabel(label);
     }
 
     @Given("Access Address Page")
-    public void accessAddress() throws InterruptedException {
+    public void accessAddress()  {
         new AddressPage().toAddressPage();
     }
 }

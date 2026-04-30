@@ -1,8 +1,10 @@
 package com.qa.pages;
 
 import com.qa.utils.TestUtils;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -12,84 +14,96 @@ public class ContactPage extends BasePage {
 
     TestUtils utils = new TestUtils();
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_contact_name\")")
-    @iOSXCUITFindBy(accessibility = "input_contact_name")
-    private WebElement nameField;
+    private final By nameField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_contact_name\")"),
+            AppiumBy.accessibilityId("input_contact_name")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_contact_phone\")")
-    @iOSXCUITFindBy(accessibility = "input_contact_phone")
-    private WebElement phoneField;
+    private final By phoneField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_contact_phone\")"),
+            AppiumBy.accessibilityId("input_contact_phone")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_contact_email\")")
-    @iOSXCUITFindBy(accessibility = "input_contact_email")
-    private WebElement emailField;
+    private final By emailField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_contact_email\")"),
+            AppiumBy.accessibilityId("input_contact_email")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Add Contact\")")
-    @iOSXCUITFindBy(accessibility = "btn_add_contact")
-    private WebElement addContactBtn;
+    private final By addContactBtn = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Add Contact\")"),
+            AppiumBy.accessibilityId("btn_add_contact")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"nav_contact\")")
-    @iOSXCUITFindBy(accessibility = "nav_contact")
-    private WebElement contactNavbar;
+    private final By contactNavbar = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"nav_contact\")"),
+            AppiumBy.accessibilityId("nav_contact")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*contact_name_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'contact_name_.*'`]")
-    private WebElement contactNameValue;
+    private final By contactNameValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*contact_name_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'contact_name_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*contact_phone_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'contact_phone_.*'`]")
-    private WebElement contactPhoneValue;
+    private final By contactPhoneValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*contact_phone_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'contact_phone_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*contact_email_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'contact_email_.*'`]")
-    private WebElement contactEmailValue;
+    private final By contactEmailValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*contact_email_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'contact_email_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*btn_edit_contact_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeAny[`name BEGINSWITH 'btn_edit_contact_'`][1]")
-    private WebElement editContactButton;
+    private final By editContactButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*btn_edit_contact_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeAny[`name BEGINSWITH 'btn_edit_contact_'`][1]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*btn_delete_contact_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeAny[`name BEGINSWITH 'btn_delete_contact_'`][1]")
-    private WebElement deleteContactButton;
+    private final By deleteContactButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*btn_delete_contact_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeAny[`name BEGINSWITH 'btn_delete_contact_'`][1]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"No contacts found\")")
-    @iOSXCUITFindBy(accessibility = "No contacts found")
-    private WebElement noContactFoundMessage;
+    private final By noContactFoundMessage = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"No contacts found\")"),
+            AppiumBy.accessibilityId("No contacts found")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Update\")")
-    @iOSXCUITFindBy(accessibility = "btn_update_contact")
-    private WebElement updateContactButton;
+    private final By updateContactButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Update\")"),
+            AppiumBy.accessibilityId("btn_update_contact")
+    );
 
     public ContactPage() {
     }
 
     public void clickUpdateContactButton(){
-        updateContactButton.click();
+        click(updateContactButton);
     }
 
     public void noContactFoundShow(){
-        noContactFoundMessage.isDisplayed();
+        waitForVisibility(noContactFoundMessage);
     }
 
     public void clickDeleteContact() {
-        deleteContactButton.click();
+        click(deleteContactButton);
     }
 
     public void clickEditContact() {
-        editContactButton.click();
+        click(editContactButton);
     }
 
     public Map<String, String> getContactDetails() {
         Map<String, String> data = new HashMap<>();
         data.put("name", getText(contactNameValue, "Contact Name"));
-        data.put("phone", getText(contactPhoneValue, "Contact Phone}"));
-        data.put("email", getText(contactEmailValue, "Contact Email}"));
+        data.put("phone", getText(contactPhoneValue, "Contact Phone")); // Fixed trailing bracket '}' from original code
+        data.put("email", getText(contactEmailValue, "Contact Email")); // Fixed trailing bracket '}' from original code
         System.out.println("name: " + data.get("name") + " phone: " + data.get("phone") + " email: " + data.get("email"));
         return data;
     }
 
     public void clickAddContact() {
-        addContactBtn.click();
+        click(addContactBtn);
     }
 
     public void inputContactEmail(String email) {
@@ -100,12 +114,12 @@ public class ContactPage extends BasePage {
         sendKeys(phoneField, phone);
     }
 
-    public void inputContactName(String name) throws InterruptedException {
+    public void inputContactName(String name)  {
         sendKeys(nameField, name);
     }
 
     public void accessContactPage() {
-        contactNavbar.click();
+        click(contactNavbar);
     }
 
 

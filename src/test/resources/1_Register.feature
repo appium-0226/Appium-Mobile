@@ -2,12 +2,12 @@
 Feature: Register
   Scenario: Register New Account
     Given Access Register Page
-    When Input Full Name with "RandomName"
-    And Input Phone Number with "RandomPhone"
-    And Select "Female" as Gender
-    And Input Username with "RandomUsername"
-    And Input Password with "RandomPassword"
-    And Input Confirm Password with "RandomConfirmPassword"
+    When Input a random Full Name
+    And Input a random Phone Number
+    And Select a random Gender
+    And Input a random Username
+    And Input a random Password
+    And Input a random Confirm Password
     And Click Register Button
     Then Verify Register Success with redirect to Login Page
     And Verify user registration data in database

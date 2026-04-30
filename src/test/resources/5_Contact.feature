@@ -3,9 +3,9 @@ Feature: Contact
 
   Scenario: Add New Contact
     Given Access Contact Page
-    When Input Contact Name with "RandomContactName"
-    And Input Contact Phone Number as "RandomNumber"
-    And Input Contact Email with "RandomEmail"
+    When Input a random Contact Name
+    And Input a random Contact Phone Number
+    And Input a random Contact Email
     And Click Add Contact Button
     Then Verify New Contact show in Contact List with correct data
     And Verify New Contact data in database
@@ -13,9 +13,9 @@ Feature: Contact
   Scenario: Update Contact
     Given Access Contact Page
     When Click Edit Button on first contact in Contact List
-    And Input Contact Name with "RandomContactName"
-    And Input Contact Phone Number as "RandomNumber"
-    And Input Contact Email with "RandomEmail"
+    And Input a random Contact Name
+    And Input a random Contact Phone Number
+    And Input a random Contact Email
     And Click Update Contact Button
     Then Verify Updated Contact show in Contact List with correct data
     And Verify Updated Contact data in database

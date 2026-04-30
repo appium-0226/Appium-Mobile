@@ -1,121 +1,52 @@
 package com.qa.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ScenarioContext {
-    private static final ThreadLocal<String> randomNumber = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastFullName = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastPhone = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastGender = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastUsername = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastPassword = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastAddressLabel = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastStreet = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastCity = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastPostalCode = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastContactName = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastPhoneContact = new ThreadLocal<>();
-    private static final ThreadLocal<String> lastEmailContact = new ThreadLocal<>();
+    private static final ThreadLocal<Map<String, Object>> contextData = ThreadLocal.withInitial(HashMap::new);
 
-    public static void setRandomNumber(String value) {
-        randomNumber.set(value);
+    public static void set(String key, Object value) {
+        contextData.get().put(key, value);
     }
 
-    public static String getRandomNumber() {
-        return randomNumber.get();
+    public static Object get(String key) {
+        return contextData.get().get(key);
     }
 
-    public static void setLastFullName(String value) {
-        lastFullName.set(value);
+    public static String getString(String key) {
+        Object value = get(key);
+        return value != null ? String.valueOf(value) : null;
     }
 
-    public static String getLastFullName() {
-        return lastFullName.get();
+    public static void clear() {
+        contextData.get().clear();
     }
 
-    public static void setLastPhone(String value) {
-        lastPhone.set(value);
-    }
-
-    public static String getLastPhone() {
-        return lastPhone.get();
-    }
-
-    public static void setLastGender(String value) {
-        lastGender.set(value);
-    }
-
-    public static String getLastGender() {
-        return lastGender.get();
-    }
-
-    public static void setLastUsername(String value) {
-        lastUsername.set(value);
-    }
-
-    public static String getLastUsername() {
-        return lastUsername.get();
-    }
-
-    public static void setLastPassword(String value) {
-        lastPassword.set(value);
-    }
-
-    public static String getLastPassword() {
-        return lastPassword.get();
-    }
-
-    public static void setlastAddressLabel(String value) {
-        lastAddressLabel.set(value);
-    }
-
-    public static String getlastAddressLabel() {
-        return lastAddressLabel.get();
-    }
-
-    public static void setLastStreet(String value) {
-        lastStreet.set(value);
-    }
-
-    public static String getLastStreet() {
-        return lastStreet.get();
-    }
-
-    public static void setLastCity(String value) {
-        lastCity.set(value);
-    }
-
-    public static String getLastCity() {
-        return lastCity.get();
-    }
-
-    public static void setLastPostalCode(String value) {
-        lastPostalCode.set(value);
-    }
-
-    public static String getLastPostalCode() {
-        return lastPostalCode.get();
-    }
-
-    public static void setLastContactName(String value) {
-        lastContactName.set(value);
-    }
-
-    public static String getLastPContactName() {
-        return lastContactName.get();
-    }
-
-    public static void setLastPhoneContact(String value) {
-        lastPhoneContact.set(value);
-    }
-
-    public static String getLastPhoneContact() {
-        return lastPhoneContact.get();
-    }
-
-    public static void setLastEmailContact(String value) {
-        lastEmailContact.set(value);
-    }
-
-    public static String getLastEmailContact() {
-        return lastEmailContact.get();
-    }
+    public static void setRandomNumber(String value) { set("randomNumber", value); }
+    public static String getRandomNumber() { return getString("randomNumber"); }
+    public static void setLastFullName(String value) { set("lastFullName", value); }
+    public static String getLastFullName() { return getString("lastFullName"); }
+    public static void setLastPhone(String value) { set("lastPhone", value); }
+    public static String getLastPhone() { return getString("lastPhone"); }
+    public static void setLastGender(String value) { set("lastGender", value); }
+    public static String getLastGender() { return getString("lastGender"); }
+    public static void setLastUsername(String value) { set("lastUsername", value); }
+    public static String getLastUsername() { return getString("lastUsername"); }
+    public static void setLastPassword(String value) { set("lastPassword", value); }
+    public static String getLastPassword() { return getString("lastPassword"); }
+    public static void setLastAddressLabel(String value) { set("lastAddressLabel", value); }
+    public static String getlastAddressLabel() { return getString("lastAddressLabel"); }
+    public static void setLastStreet(String value) { set("lastStreet", value); }
+    public static String getLastStreet() { return getString("lastStreet"); }
+    public static void setLastCity(String value) { set("lastCity", value); }
+    public static String getLastCity() { return getString("lastCity"); }
+    public static void setLastPostalCode(String value) { set("lastPostalCode", value); }
+    public static String getLastPostalCode() { return getString("lastPostalCode"); }
+    public static void setLastContactName(String value) { set("lastContactName", value); }
+    public static String getLastContactName() { return getString("lastContactName"); }
+    public static void setLastPhoneContact(String value) { set("lastPhoneContact", value); }
+    public static String getLastPhoneContact() { return getString("lastPhoneContact"); }
+    public static void setLastEmailContact(String value) { set("lastEmailContact", value); }
+    public static String getLastEmailContact() { return getString("lastEmailContact"); }
 }

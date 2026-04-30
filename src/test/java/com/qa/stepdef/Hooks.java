@@ -27,8 +27,14 @@ public class Hooks {
                         .getScreenshotAs(org.openqa.selenium.OutputType.BYTES);
                 scenario.attach(screenshot, "image/png", scenario.getName());
             } catch (Exception e) {
-                System.err.println("Gagal mengambil screenshot: " + e.getMessage());
+                com.qa.utils.TestUtils.log().error("Gagal mengambil screenshot: " + e.getMessage());
             }
+        }
+
+        try {
+            com.qa.utils.DBManager.close();
+        } catch (Exception e) {
+            com.qa.utils.TestUtils.log().error("Gagal menutup koneksi database: " + e.getMessage());
         }
     }
 

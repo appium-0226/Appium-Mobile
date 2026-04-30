@@ -2,6 +2,7 @@ package com.qa.utils;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
@@ -17,12 +18,12 @@ public class DBManager {
                 String user = props.getProperty("db.user");
                 String password = props.getProperty("db.password");
 
-                System.out.println(">>> Connecting to Database: " + url);
+                TestUtils.log().info("Connecting to Database: " + url);
                 Class.forName("com.mysql.cj.jdbc.Driver");
                 conn = DriverManager.getConnection(url, user, password);
-                System.out.println(">>> Database Connected Successfully!");
+                TestUtils.log().info("Database Connected Successfully!");
             } catch (Exception e) {
-                System.err.println(">>> DATABASE CONNECTION FAILED: " + e.getMessage());
+                TestUtils.log().error("DATABASE CONNECTION FAILED: " + e.getMessage());
                 throw e;
             }
         }
@@ -38,12 +39,33 @@ public class DBManager {
     public static void close() throws Exception {
         if (conn != null && !conn.isClosed()) {
             conn.close();
-            System.out.println(">>> Database Connection Closed.");
+            TestUtils.log().info("Database Connection Closed.");
         }
     }
 
     public static ResultSet executeQuery(String query) throws Exception {
         Statement stmt = getConnection().createStatement();
         return stmt.executeQuery(query);
+    }
+
+    public static ResultSet getUserByUsername(String username) throws Exception {
+        String query = "SELECT * FROM users WHERE username = ?";
+        PreparedStatement pstmt = getConnection().prepareStatement(query);
+        pstmt.setString(1, username);
+        return pstmt.executeQuery();
+    }
+
+    public static ResultSet getAddressByStreet(String street) throws Exception {
+        String query = "SELECT * FROM addresses WHERE street = ?";
+        PreparedStatement pstmt = getConnection().prepareStatement(query);
+        pstmt.setString(1, street);
+        return pstmt.executeQuery();
+    }
+
+    public static ResultSet getContactByName(String name) throws Exception {
+        String query = "SELECT * FROM contacts WHERE name = ?";
+        PreparedStatement pstmt = getConnection().prepareStatement(query);
+        pstmt.setString(1, name);
+        return pstmt.executeQuery();
     }
 }

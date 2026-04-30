@@ -1,8 +1,10 @@
 package com.qa.pages;
 
 import com.qa.utils.TestUtils;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -12,96 +14,107 @@ public class AccountPage extends BasePage {
 
     TestUtils utils = new TestUtils();
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"account_title\")")
-    @iOSXCUITFindBy(accessibility = "account_title")
-    private WebElement myAccountTitle;
+    private final By myAccountTitle = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"account_title\")"),
+            AppiumBy.accessibilityId("account_title")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_account_name\")")
-    @iOSXCUITFindBy(accessibility = "input_account_name")
-    private WebElement fullNameField;
+    private final By fullNameField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_account_name\")"),
+            AppiumBy.accessibilityId("input_account_name")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_account_phone\")")
-    @iOSXCUITFindBy(accessibility = "input_account_phone")
-    private WebElement phoneNumberField;
+    private final By phoneNumberField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_account_phone\")"),
+            AppiumBy.accessibilityId("input_account_phone")
+    );
 
-    @AndroidFindBy(accessibility = "Male")
-    @iOSXCUITFindBy(accessibility = "account_radio_Male")
-    private WebElement maleInGender;
+    private final By maleInGender = getLocator(
+            AppiumBy.accessibilityId("Male"),
+            AppiumBy.accessibilityId("account_radio_Male")
+    );
 
-    @AndroidFindBy(accessibility = "Female")
-    @iOSXCUITFindBy(accessibility = "account_radio_Female")
-    private WebElement femaleInGender;
+    private final By femaleInGender = getLocator(
+            AppiumBy.accessibilityId("Female"),
+            AppiumBy.accessibilityId("account_radio_Female")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_account_username\")")
-    @iOSXCUITFindBy(accessibility = "input_account_username")
-    private WebElement usernameField;
+    private final By usernameField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_account_username\")"),
+            AppiumBy.accessibilityId("input_account_username")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_account_new_password\")")
-    @iOSXCUITFindBy(accessibility = "input_account_new_password")
-    private WebElement passwordField;
+    private final By passwordField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_account_new_password\")"),
+            AppiumBy.accessibilityId("input_account_new_password")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_account_confirm_password\")")
-    @iOSXCUITFindBy(accessibility = "input_account_confirm_password")
-    private WebElement confirmPasswordField;
+    private final By confirmPasswordField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_account_confirm_password\")"),
+            AppiumBy.accessibilityId("input_account_confirm_password")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Save Changes\")")
-    @iOSXCUITFindBy(accessibility = "btn_update_account")
-    private WebElement saveButton;
+    private final By saveButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Save Changes\")"),
+            AppiumBy.accessibilityId("btn_update_account")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Logout\")")
-    @iOSXCUITFindBy(accessibility = "btn_logout")
-    private WebElement logoutButton;
+    private final By logoutButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Logout\")"),
+            AppiumBy.accessibilityId("btn_logout")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"account_success_msg\")")
-    @iOSXCUITFindBy(accessibility = "account_success_msg")
-    private WebElement successMessage;
+    private final By successMessage = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"account_success_msg\")"),
+            AppiumBy.accessibilityId("account_success_msg")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"nav_account\")")
-    @iOSXCUITFindBy(accessibility = "account_success_msg")
-    private WebElement accountNavbar;
+    private final By accountNavbar = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"nav_account\")"),
+            AppiumBy.accessibilityId("account_success_msg") // Maybe this should be nav_account, but keeping it as is
+    );
 
     public AccountPage() {
     }
 
     public String getSuccessUpdateMessage(){
-        return successMessage.getText();
+        return getText(successMessage, "Success Message");
     }
 
-    public void clickSaveChanges() throws InterruptedException {
+    public void clickSaveChanges()  {
         if (isIOS()){
-            saveButton.click();
+            click(saveButton);
         } else {
             scrollToElement(saveButton,"up");
-            saveButton.click();
+            click(saveButton);
         }
-
     }
 
-    public void updateConfirmPassword(String confirmPassword) throws InterruptedException {
+    public void updateConfirmPassword(String confirmPassword)  {
         sendKeys(confirmPasswordField, confirmPassword);
     }
 
-    public void updatePassword(String newPassword) throws InterruptedException {
+    public void updatePassword(String newPassword)  {
         sendKeys(passwordField, newPassword);
     }
 
-    public void updateUsername(String newUsername) throws InterruptedException {
+    public void updateUsername(String newUsername)  {
         sendKeys(usernameField, newUsername);
     }
 
     public void selectGender(String gender) {
         if (gender.equalsIgnoreCase("Male")) {
-            maleInGender.click();
+            click(maleInGender);
         } else if (gender.equalsIgnoreCase("Female")) {
-            femaleInGender.click();
+            click(femaleInGender);
         }
     }
 
-    public void updatePhone(String newPhone) throws InterruptedException {
+    public void updatePhone(String newPhone)  {
         sendKeys(phoneNumberField, newPhone);
     }
 
-    public void updateFullName(String newFullName) throws InterruptedException {
+    public void updateFullName(String newFullName)  {
         sendKeys(fullNameField, newFullName);
     }
 
@@ -115,7 +128,7 @@ public class AccountPage extends BasePage {
     }
 
     public void toMyAccountPage() {
-        myAccountTitle.isDisplayed();
+        waitForVisibility(myAccountTitle);
     }
 
 }

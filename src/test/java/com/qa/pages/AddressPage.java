@@ -1,8 +1,10 @@
 package com.qa.pages;
 
 import com.qa.utils.TestUtils;
+import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.HashMap;
@@ -12,75 +14,88 @@ public class AddressPage extends BasePage {
 
     TestUtils utils = new TestUtils();
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_address_label\")")
-    @iOSXCUITFindBy(accessibility = "input_address_label")
-    private WebElement labelField;
+    private final By labelField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_address_label\")"),
+            AppiumBy.accessibilityId("input_address_label")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_address_street\")")
-    @iOSXCUITFindBy(accessibility = "input_address_street")
-    private WebElement streetField;
+    private final By streetField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_address_street\")"),
+            AppiumBy.accessibilityId("input_address_street")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_address_city\")")
-    @iOSXCUITFindBy(accessibility = "input_address_city")
-    private WebElement cityField;
+    private final By cityField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_address_city\")"),
+            AppiumBy.accessibilityId("input_address_city")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"input_address_postal\")")
-    @iOSXCUITFindBy(accessibility = "input_address_postal")
-    private WebElement postalCodeField;
+    private final By postalCodeField = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"input_address_postal\")"),
+            AppiumBy.accessibilityId("input_address_postal")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Add Address\")")
-    @iOSXCUITFindBy(accessibility = "btn_add_address")
-    private WebElement addAddressBtn;
+    private final By addAddressBtn = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Add Address\")"),
+            AppiumBy.accessibilityId("btn_add_address")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*address_label_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'address_label_.*'`]")
-    private WebElement labelValue;
+    private final By labelValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*address_label_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'address_label_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*address_street_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'address_street_.*'`]")
-    private WebElement streetValue;
+    private final By streetValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*address_street_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'address_street_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*address_city_.*\")")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name MATCHES 'address_city_.*'`]")
-    private WebElement cityPostalCodeValue;
+    private final By cityPostalCodeValue = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*address_city_.*\")"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name MATCHES 'address_city_.*'`]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceId(\"nav_address\")")
-    @iOSXCUITFindBy(accessibility = "nav_address")
-    private WebElement addressNavbar;
+    private final By addressNavbar = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceId(\"nav_address\")"),
+            AppiumBy.accessibilityId("nav_address")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*btn_edit_address_.*\").instance(0)")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeAny[`name BEGINSWITH 'btn_edit_address_'`][1]")
-    private WebElement editFirstAddressBtn;
+    private final By editFirstAddressBtn = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*btn_edit_address_.*\").instance(0)"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeAny[`name BEGINSWITH 'btn_edit_address_'`][1]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().resourceIdMatches(\".*btn_delete_address_.*\").instance(0)")
-    @iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeAny[`name BEGINSWITH 'btn_delete_address_'`][1]")
-    private WebElement deleteFirstAddressBtn;
+    private final By deleteFirstAddressBtn = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().resourceIdMatches(\".*btn_delete_address_.*\").instance(0)"),
+            AppiumBy.iOSClassChain("**/XCUIElementTypeAny[`name BEGINSWITH 'btn_delete_address_'`][1]")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"Update\")")
-    @iOSXCUITFindBy(accessibility = "btn_update_address")
-    private WebElement updateButton;
+    private final By updateButton = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"Update\")"),
+            AppiumBy.accessibilityId("btn_update_address")
+    );
 
-    @AndroidFindBy(uiAutomator = "new UiSelector().text(\"No addresses found\")")
-    @iOSXCUITFindBy(accessibility = "No addresses found")
-    private WebElement noAddressFoundMessage;
+    private final By noAddressFoundMessage = getLocator(
+            AppiumBy.androidUIAutomator("new UiSelector().text(\"No addresses found\")"),
+            AppiumBy.accessibilityId("No addresses found")
+    );
 
     public AddressPage() {
     }
 
     public void noAddressFoundShow(){
-        noAddressFoundMessage.isDisplayed();
+        waitForVisibility(noAddressFoundMessage);
     }
 
     public void clickUpdateButton(){
-        updateButton.click();
+        click(updateButton);
     }
 
     public void deleteFirstAddress() {
-        deleteFirstAddressBtn.click();
+        click(deleteFirstAddressBtn);
     }
 
     public void clickEditFirstAddress(){
-        editFirstAddressBtn.click();
+        click(editFirstAddressBtn);
     }
 
     public Map<String, String> getNewAddressData() {
@@ -96,35 +111,31 @@ public class AddressPage extends BasePage {
             data.put("city", cityPostalText);
             data.put("postalCode", "");
         }
-        System.out.println("label: " + data.get("label"));
-        System.out.println("street: " + data.get("street"));
-        System.out.println("city: " + data.get("city"));
-        System.out.println("postalCode: " + data.get("postalCode"));
         return data;
     }
 
     public void clickAddAddress() {
-        addAddressBtn.click();
+        click(addAddressBtn);
     }
 
-    public void inputPostalCode(String postalCode) throws InterruptedException {
+    public void inputPostalCode(String postalCode)  {
         sendKeys(postalCodeField, postalCode);
     }
 
-    public void inputCity(String city) throws InterruptedException {
+    public void inputCity(String city)  {
         sendKeys(cityField, city);
     }
 
-    public void inputStreet(String street) throws InterruptedException {
+    public void inputStreet(String street)  {
         sendKeys(streetField, street);
     }
 
-    public void inputLabel(String label) throws InterruptedException {
+    public void inputLabel(String label)  {
         sendKeys(labelField, label);
     }
 
-    public void toAddressPage() throws InterruptedException {
-        addressNavbar.click();
+    public void toAddressPage()  {
+        click(addressNavbar);
     }
 
 }

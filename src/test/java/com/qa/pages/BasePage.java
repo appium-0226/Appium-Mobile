@@ -32,6 +32,14 @@ public class BasePage {
         PageFactory.initElements(new AppiumFieldDecorator(this.driver), this);
     }
 
+    public By getLocator(By androidBy, By iosBy) {
+        if (new GlobalParams().getPlatformName().equalsIgnoreCase("Android")) {
+            return androidBy;
+        } else {
+            return iosBy;
+        }
+    }
+
     public void waitForVisibility(WebElement e) {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(TestUtils.WAIT));
         wait.until(ExpectedConditions.visibilityOf(e));
@@ -51,6 +59,17 @@ public class BasePage {
         waitForVisibility(e);
         TestUtils.log().info(msg);
         e.click();
+    }
+
+    public void click(By e) {
+        waitForVisibility(e);
+        driver.findElement(e).click();
+    }
+
+    public void click(By e, String msg) {
+        waitForVisibility(e);
+        TestUtils.log().info(msg);
+        driver.findElement(e).click();
     }
 
     public void sendKeys(WebElement e, String txt) {
@@ -76,6 +95,31 @@ public class BasePage {
         }
     }
 
+    public void sendKeys(By e, String txt) {
+        waitForVisibility(e);
+        WebElement element = driver.findElement(e);
+        element.clear();
+        element.sendKeys(txt);
+        if (isIOS()) {
+            Dimension size = driver.manage().window().getSize();
+            swipe(size.width / 5, size.height / 8, size.width / 5, size.height / 8, 100);
+        }
+    }
+
+    public void sendKeys(By e, String txt, String msg) {
+        waitForVisibility(e);
+        TestUtils.log().info(msg);
+        WebElement element = driver.findElement(e);
+        if (isIOS()) {
+            element.clear(); // Clear field first on iOS
+        }
+        element.sendKeys(txt);
+        if (isIOS()) {
+            Dimension size = driver.manage().window().getSize();
+            swipe(size.width / 5, size.height / 8, size.width / 5, size.height / 8, 100);
+        }
+    }
+
     public String getAttribute(WebElement e, String attribute) {
         waitForVisibility(e);
         return e.getAttribute(attribute);
@@ -87,6 +131,20 @@ public class BasePage {
     }
 
     public String getText(WebElement e, String msg) {
+        String txt = switch (new GlobalParams().getPlatformName()) {
+            case "Android" -> getAttribute(e, "text");
+            case "iOS" -> {
+                String label = getAttribute(e, "label");
+                String value = getAttribute(e, "value");
+                yield (label != null && !label.isEmpty()) ? label : value;
+            }
+            default -> throw new IllegalStateException("Unexpected platform: " + new GlobalParams().getPlatformName());
+        };
+        TestUtils.log().info("{}: {}", msg, txt);
+        return txt;
+    }
+
+    public String getText(By e, String msg) {
         String txt = switch (new GlobalParams().getPlatformName()) {
             case "Android" -> getAttribute(e, "text");
             case "iOS" -> {
@@ -224,62 +282,4 @@ public class BasePage {
         swipe(startX, startY, startX, endY, 1000);
     }
 
-    public String generateRandomNumber(int length) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            sb.append((int) (Math.random() * 10));
-        }
-        return sb.toString();
-    }
-
-    public String generateRandomName() {
-        String randomDigits = generateRandomNumber(3);
-        com.qa.utils.ScenarioContext.setRandomNumber(randomDigits);
-        if (isIOS()) {
-            return "Test-iOS-" + randomDigits;
-        } else {
-            return "Test-Android-" + randomDigits;
-        }
-    }
-
-    public String generateRandomUsername() {
-        String randomDigits = com.qa.utils.ScenarioContext.getRandomNumber();
-        if (randomDigits == null) {
-            randomDigits = generateRandomNumber(3);
-            com.qa.utils.ScenarioContext.setRandomNumber(randomDigits);
-        }
-        if (isIOS()) {
-            return "test-ios-" + randomDigits;
-        } else {
-            return "test-android-" + randomDigits;
-        }
-    }
-
-    public String generateRandomPhone() {
-        return "08" + generateRandomNumber(10);
-    }
-
-    public String generateRandomPassword() {
-        return generateRandomNumber(6);
-    }
-
-    public String generateRandomStreet() {
-        String[] streets = {"Sudirman", "Thamrin", "Gatot Subroto", "Rasuna Said", "Suryo"};
-        int index = (int) (Math.random() * streets.length);
-        return "Jalan " + streets[index] + " No. " + generateRandomNumber(2);
-    }
-
-    public String generateRandomCity() {
-        String[] cities = {"Jakarta", "Bandung", "Surabaya", "Medan", "Semarang", "Yogyakarta"};
-        int index = (int) (Math.random() * cities.length);
-        return cities[index];
-    }
-
-    public String generateRandomPostalCode() {
-        return generateRandomNumber(5);
-    }
-
-    public String generateRandomEmail() {
-        return "test" + generateRandomNumber(5) + "@mail.com";
-    }
 }
