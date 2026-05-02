@@ -53,9 +53,13 @@ public class CapabilitiesManager {
                             .setDeviceName(params.getDeviceName())
                             .setAutomationName(props.getProperty("iOSAutomationName"))
                             .setBundleId(props.getProperty("iOSBundleId"))
-                            .setWdaLocalPort(Integer.parseInt(params.getWdLocalPort()));
+                            .setWdaLocalPort(Integer.parseInt(params.getWdLocalPort()))
+                            .setNoReset(true)
+                            .setShouldTerminateApp(true)
+                            .setUsePrebuiltWda(true);
 
-                    iosOptions.setCapability("webkitDebugProxyPort", Integer.parseInt(params.getWebkitDebugProxyPort()));
+                    iosOptions.setCapability("webkitDebugProxyPort",
+                            Integer.parseInt(params.getWebkitDebugProxyPort()));
                     iosOptions.setCapability("sendKeyStrategy", "setValue");
                     iosOptions.setCapability("maxTypingFrequency", 30);
                     iosOptions.setApp(iOSAppUrl);

@@ -14,12 +14,12 @@ public class Hooks {
     @Before
     public void initialize() throws Exception {
         com.qa.utils.DBManager.initialize();
-        new VideoManager().startRecording();
+        //new VideoManager().startRecording();
     }
 
     @After
     public void quit(Scenario scenario) {
-        new VideoManager().stopRecording(scenario);
+        //new VideoManager().stopRecording(scenario);
 
         if (scenario.isFailed()) {
             try {

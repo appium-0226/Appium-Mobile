@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<suite name="Suite" parallel="tests" thread-count="2">
+<suite name="Suite" parallel="tests" thread-count="4">
 
     <test name="Pixel 8 Android 15">
         <parameter name="platformName" value="Android"/>
@@ -14,6 +13,19 @@
         </classes>
     </test>
 
+    <test name="Pixel 7 Android 14">
+        <parameter name="platformName" value="Android"/>
+        <parameter name="platformVersion" value="14"/>
+        <parameter name="deviceName" value="Pixel7Android14"/>
+        <parameter name="udid" value="emulator-5556"/>
+        <parameter name="systemPort" value="10002"/>
+        <parameter name="chromeDriverPort" value="20002"/>
+        <parameter name="appiumPort" value="4274"/>
+        <classes>
+            <class name="com.qa.runners.MyAndroidRunnerTest"/>
+        </classes>
+    </test>
+
     <test name="iPhone 17 iOS 262">
         <parameter name="platformName" value="iOS"/>
         <parameter name="platformVersion" value="26.2"/>
@@ -22,6 +34,19 @@
         <parameter name="wdaLocalPort" value="10003"/>
         <parameter name="webkitDebugProxyPort" value="20003"/>
         <parameter name="appiumPort" value="4725"/>
+        <classes>
+            <class name="com.qa.runners.MyiOSRunnerTest"/>
+        </classes>
+    </test>
+
+    <test name="iPhone 16e iOS 262">
+        <parameter name="platformName" value="iOS"/>
+        <parameter name="platformVersion" value="26.2"/>
+        <parameter name="deviceName" value="iPhone 16e"/>
+        <parameter name="udid" value="16FE4EE3-E692-446F-BC4A-4895448E01FD"/>
+        <parameter name="wdaLocalPort" value="10004"/>
+        <parameter name="webkitDebugProxyPort" value="20004"/>
+        <parameter name="appiumPort" value="4726"/>
         <classes>
             <class name="com.qa.runners.MyiOSRunnerTest"/>
         </classes>

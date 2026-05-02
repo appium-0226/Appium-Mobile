@@ -84,6 +84,7 @@ public class RegisterPage extends BasePage {
     }
 
     public void inputConfirmPassword(String confirmPassword) {
+        scrollToElement(confirmPasswordField, "up");
         sendKeys(confirmPasswordField, confirmPassword);
     }
 
