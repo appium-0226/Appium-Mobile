@@ -3,6 +3,8 @@ package com.qa.utils;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.cucumber.java.Scenario;
+import io.qameta.allure.Allure;
+import java.io.ByteArrayInputStream;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -40,7 +42,11 @@ public class VideoManager {
             }
 
             if (base64Video != null) {
-                saveVideo(base64Video, scenario.getName());
+                byte[] decodedVideo = Base64.getDecoder().decode(base64Video);
+                saveVideo(decodedVideo, scenario.getName());
+                // Attach to Allure
+                Allure.addAttachment("Video - " + scenario.getName(), "video/mp4",
+                        new ByteArrayInputStream(decodedVideo), "mp4");
             }
         } catch (Exception e) {
             TestUtils.log().error("Failed to stop recording: {}", e.getMessage());
@@ -59,7 +65,7 @@ public class VideoManager {
         }
     }
 
-    private void saveVideo(String base64Video, String scenarioName) {
+    private void saveVideo(byte[] videoBytes, String scenarioName) {
         try {
             GlobalParams params = new GlobalParams();
             String deviceFolder = params.getPlatformName() + "_" + params.getDeviceName();
@@ -72,7 +78,7 @@ public class VideoManager {
             }
 
             File videoFile = new File(videoDir, timestamp + "_" + safeName + ".mp4");
-            Files.write(videoFile.toPath(), Base64.getDecoder().decode(base64Video));
+            Files.write(videoFile.toPath(), videoBytes);
 
             TestUtils.log().info("Video saved: {}", videoFile.getPath());
         } catch (Exception e) {

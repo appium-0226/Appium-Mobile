@@ -11,10 +11,10 @@ import org.apache.logging.log4j.ThreadContext;
 import org.testng.annotations.*;
 
 @CucumberOptions(
-        plugin = {"pretty"
-                , "html:target/Android/report.html"
-                , "json:target/Android/report.json"
-                , "summary"}
+        plugin = {
+                "pretty",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
+        }
         , features = {"src/test/resources"}
         , glue = {"com.qa.stepdef"}
         , dryRun = false

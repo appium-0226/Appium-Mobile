@@ -10,17 +10,16 @@ import io.cucumber.testng.TestNGCucumberRunner;
 import org.apache.logging.log4j.ThreadContext;
 import org.testng.annotations.*;
 
-@CucumberOptions(
-        plugin = {"pretty"
-                , "html:target/iOS/report.html"
-                , "json:target/iOS/report.json"
-                , "summary"}
+@CucumberOptions(plugin = {
+                "pretty",
+                "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
+                }
         , features = {"src/test/resources"}
         , glue = {"com.qa.stepdef"}
         , dryRun = false
         , monochrome = true
         , tags = "@test"
 )
-public class MyiOSRunnerTest extends MyTestNGRunnerBase{
+public class MyiOSRunnerTest extends MyTestNGRunnerBase {
 
 }

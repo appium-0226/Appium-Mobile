@@ -1,6 +1,9 @@
 .idea/
 logs/
 target/
+.allure/
+.vscode/
+allure-report/
 *.log
 .DS_Store
 *.iml

@@ -9,6 +9,7 @@ public class GlobalParams {
     private static final String RUN_TIMESTAMP = "Run_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));
 
     private static ThreadLocal<String> platformName = new ThreadLocal<>();
+    private static ThreadLocal<String> platformVersion = new ThreadLocal<>();
     private static ThreadLocal<String> udid = new ThreadLocal<>();
     private static ThreadLocal<String> deviceName = new ThreadLocal<>();
     private static ThreadLocal<String> appiumPort = new ThreadLocal<>();
@@ -27,6 +28,14 @@ public class GlobalParams {
 
     public void setPlatformName(String platformName1) {
         platformName.set(platformName1);
+    }
+
+    public String getPlatformVersion() {
+        return platformVersion.get();
+    }
+
+    public void setPlatformVersion(String platformVersion1) {
+        platformVersion.set(platformVersion1);
     }
 
     public String getUdid() {
@@ -88,6 +97,7 @@ public class GlobalParams {
     public void initializeGlobalParams() {
         GlobalParams params = new GlobalParams();
         params.setPlatformName(System.getProperty("platformName", "Android"));
+        params.setPlatformVersion(System.getProperty("platformVersion", "15"));
         params.setUdid(System.getProperty("udid", "emulator-5554"));
         params.setDeviceName(System.getProperty("deviceName", "Pixel8Android15"));
 
