@@ -170,13 +170,19 @@ public class MyTestNGRunnerBase {
     private void generateAllureReport() {
         try {
             String allureBin = ".allure/allure-2.30.0/bin/allure";
+            File allureExecutable = new File(allureBin);
+            if (!allureExecutable.exists()) {
+                System.out.println("Allure CLI not found at " + allureBin + ". Skipping local report generation.");
+                return;
+            }
+
             ProcessBuilder pb = new ProcessBuilder(
                     allureBin, "generate", "target/allure-results",
                     "--clean", "-o", "allure-report");
             pb.inheritIO();
             pb.start().waitFor();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Failed to generate Allure report: " + e.getMessage());
         }
     }
 

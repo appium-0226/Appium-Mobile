@@ -66,7 +66,7 @@
 		</data>
 		<key>Frameworks/hermes.framework/hermes</key>
 		<data>
-		lWjejpYAw9zXkOzqGgtX03aR7zI=
+		N1JDK6DyCAr+KNFJKI0ij3cJ+Zw=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -765,10 +765,6 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>SimpleApp.debug.dylib</key>
-		<data>
-		AbaMGGQ1wcSYbYbhTFpv6FQOAMk=
-		</data>
 		<key>SimpleLineIcons.ttf</key>
 		<data>
 		n/uBpaEREuKS8swyPphIa61ZdZk=
@@ -777,9 +773,25 @@
 		<data>
 		akipYrBsw6y9/WHfDZo0dE7qXo0=
 		</data>
-		<key>__preview.dylib</key>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png</key>
 		<data>
-		z3/QUVl+Zmnkz9U3K3j0DO60t6I=
+		/9xO1HOyvigG6Z0PaA0dLp/gDlY=
+		</data>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon.png</key>
+		<data>
+		keLOi1inJdXs0IRSKnXqyhW57Aw=
+		</data>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png</key>
+		<data>
+		rSvG8m4uPMSItIcsIF+N2tDJD8U=
+		</data>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png</key>
+		<data>
+		8kFG8Vv7Hfrw4yVcFrhUhbHieBA=
+		</data>
+		<key>main.jsbundle</key>
+		<data>
+		/ZSjxcc8i/BG9lm8yr/vI9RpTNo=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -893,7 +905,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			N8iiqA9lEec3K0kWavFsrRAL8jE0i+G1Mp7T5q6Rd10=
+			Uq1XLuqGsGBR1scUxD5oRYCBK82lkF5ZcPz1uaR1RLU=
 			</data>
 		</dict>
 		<key>Ionicons.ttf</key>
@@ -1609,13 +1621,6 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>SimpleApp.debug.dylib</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			UK7g7XBz0wHmAFjgNdP6fCePm8XcZJu6nhvrSx7dC6E=
-			</data>
-		</dict>
 		<key>SimpleLineIcons.ttf</key>
 		<dict>
 			<key>hash2</key>
@@ -1630,11 +1635,39 @@
 			3Y7kA7vL9eWLd9ykrAPrr6E6KEo9h9jqnKSQQ1qG+kg=
 			</data>
 		</dict>
-		<key>__preview.dylib</key>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon-mask.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SF55XZJ5GhM8VLmOYkOt3XL6n+rLDoG4mzxtaHKVfL8=
+			LJXowmdeeZM1/QBGuwfb2gbLfs/1HtN5IsYwnWGcxNM=
+			</data>
+		</dict>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			LN/rjlzN55dvcBL7jM5zryIpAp7iHU8VCf7RFIccbNg=
+			</data>
+		</dict>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon@2x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			K3RDqaWOksoRpXW9wRWYYVpX3eMFzYznDWAmBrMCzZg=
+			</data>
+		</dict>
+		<key>assets/node_modules/@react-navigation/elements/src/assets/back-icon@3x.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Pd0Hc+0n4j0leJ8wFzGzrEVa2L5aonoKG4OPicbSciU=
+			</data>
+		</dict>
+		<key>main.jsbundle</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mmjh7fkwzY4WK49dF9qNXJw1XZSQIjX9WL07yL6x7ck=
 			</data>
 		</dict>
 	</dict>

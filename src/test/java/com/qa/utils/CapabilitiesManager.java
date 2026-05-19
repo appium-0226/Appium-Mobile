@@ -17,7 +17,8 @@ public class CapabilitiesManager {
             switch (params.getPlatformName()) {
 
                 case "Android":
-                    String androidAppUrl = System.getProperty("user.dir")
+                    String basePath = System.getenv("HOST_PWD") != null ? System.getenv("HOST_PWD") : System.getProperty("user.dir");
+                    String androidAppUrl = basePath
                             + File.separator + "src"
                             + File.separator + "test"
                             + File.separator + "resources"
@@ -38,7 +39,8 @@ public class CapabilitiesManager {
                             .setApp(androidAppUrl);
 
                 case "iOS":
-                    String iOSAppUrl = System.getProperty("user.dir")
+                    String iOSBasePath = System.getenv("HOST_PWD") != null ? System.getenv("HOST_PWD") : System.getProperty("user.dir");
+                    String iOSAppUrl = iOSBasePath
                             + File.separator + "src"
                             + File.separator + "test"
                             + File.separator + "resources"

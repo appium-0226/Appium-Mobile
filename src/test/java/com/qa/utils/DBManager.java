@@ -14,9 +14,10 @@ public class DBManager {
         if (conn == null || conn.isClosed()) {
             try {
                 Properties props = new PropertyManager().getProps();
-                String url = props.getProperty("db.url");
-                String user = props.getProperty("db.user");
-                String password = props.getProperty("db.password");
+
+                String url = System.getenv("db.url") != null ? System.getenv("db.url") : props.getProperty("db.url");
+                String user = System.getenv("db.user") != null ? System.getenv("db.user") : props.getProperty("db.user");
+                String password = System.getenv("db.password") != null ? System.getenv("db.password") : props.getProperty("db.password");
 
                 TestUtils.log().info("Connecting to Database: " + url);
                 Class.forName("com.mysql.cj.jdbc.Driver");

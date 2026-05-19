@@ -18,19 +18,19 @@ public class ServerManager {
     }
 
     public void startServer() {
-        TestUtils.log().info("starting appium server");
-
+        if (System.getenv("appiumUrl") != null) {
+            TestUtils.log().info("Using remote Appium server: " + System.getenv("appiumUrl"));
+            return;
+        }
+        TestUtils.log().info("starting appium server locally");
         AppiumDriverLocalService server = getAppiumService();
         server.start();
-
         if (!server.isRunning()) {
             TestUtils.log().info("Appium server not started. ABORT!!!");
             throw new AppiumServerHasNotBeenStartedLocallyException("Appium server not started. ABORT!!!");
         }
-
         server.clearOutPutStreams();
         this.server.set(server);
-
         TestUtils.log().info("Appium server started");
     }
 
@@ -71,7 +71,7 @@ public class ServerManager {
 
         String currentPath = System.getenv("PATH");
         environment.put("PATH", currentPath + ":/usr/local/bin:/opt/homebrew/bin");
-        
+
         if (System.getenv("ANDROID_HOME") != null) {
             environment.put("ANDROID_HOME", System.getenv("ANDROID_HOME"));
         }

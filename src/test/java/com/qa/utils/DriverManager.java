@@ -7,6 +7,7 @@ import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.ios.options.XCUITestOptions;
 
 import java.net.URL;
+
 public class DriverManager {
 
     private static ThreadLocal<AppiumDriver> driver = new ThreadLocal<>();
@@ -24,7 +25,12 @@ public class DriverManager {
         Object capabilities = new CapabilitiesManager().getCaps();
         AppiumDriver newDriver = null;
 
-        URL serverUrl = new ServerManager().getServer().getUrl();
+        URL serverUrl;
+        if (System.getenv("appiumUrl") != null) {
+            serverUrl = new URL(System.getenv("appiumUrl"));
+        } else {
+            serverUrl = new ServerManager().getServer().getUrl();
+        }
 
         switch (params.getPlatformName()) {
             case "Android":
