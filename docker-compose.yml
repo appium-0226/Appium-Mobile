@@ -17,10 +17,16 @@ services:
     #   - db
     environment:
       # - db.url=jdbc:mysql://db:3306/simpleandroid_db
-      - db.url=jdbc:mysql://150.109.22.19:3306/simpleandroid_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
-      - db.user=mhasan
-      - db.password=mhasan123
-      - appiumUrl=http://host.docker.internal:4723
+      - db.url=${DB_URL}
+      - db.user=${DB_USER}
+      - db.password=${DB_PASSWORD}
+      - appiumUrl=${APPIUM_URL}
       - HOST_PWD=${PWD}
     volumes:
       - ./target:/app/target
+      - maven-cache:/root/.m2
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+volumes:
+  maven-cache:

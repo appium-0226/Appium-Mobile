@@ -8,3 +8,5 @@ allure-report/
 .DS_Store
 *.iml
 *.class
+
+.env
