@@ -6,6 +6,6 @@ COPY pom.xml .
 
 RUN mvn dependency:go-offline -B
 
-COPY src ./src
+COPY . .
 
-CMD ["mvn", "test"]
+CMD ["sh", "-c", "mvn clean test -DsuiteXmlFile=$SUITE_FILE"]

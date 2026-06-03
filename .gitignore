@@ -4,6 +4,7 @@ target/
 .allure/
 .vscode/
 allure-report/
+allure-results/
 *.log
 .DS_Store
 *.iml
