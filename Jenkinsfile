@@ -18,13 +18,15 @@ stages {
             withCredentials([
                 string(credentialsId: 'DB_URL', variable: 'DB_URL'),
                 string(credentialsId: 'DB_USER', variable: 'DB_USER'),
-                string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD')
+                string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD'),
+                string(credentialsId: 'APPIUM_URL', variable: 'APPIUM_URL')
             ]) {
 
                 sh '''
                 echo "DB_URL=$DB_URL" > .env
                 echo "DB_USER=$DB_USER" >> .env
                 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+                echo "APPIUM_URL=$APPIUM_URL" >> .env
                 '''
             }
         }
