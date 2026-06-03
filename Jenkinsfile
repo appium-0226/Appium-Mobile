@@ -1,6 +1,11 @@
 pipeline {
 agent any
 
+```
+environment {
+    PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
+}
+
 stages {
 
     stage('Checkout Code') {
@@ -23,6 +28,16 @@ stages {
                 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
                 '''
             }
+        }
+    }
+
+    stage('Verify Docker') {
+        steps {
+            sh '''
+            which docker
+            docker --version
+            docker compose version
+            '''
         }
     }
 
@@ -52,5 +67,6 @@ post {
         '''
     }
 }
+```
 
 }
