@@ -45,7 +45,10 @@ stages {
     stage('Run Automated Tests') {
         steps {
             sh '''
-            docker compose up --build --remove-orphans --exit-code-from test-runner
+            docker compose up --build \
+              --remove-orphans \
+              --abort-on-container-exit \
+              --exit-code-from test-runner
             '''
         }
     }
@@ -62,10 +65,26 @@ stages {
 }
 
 post {
+
     always {
+
+        archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
+
         sh '''
         docker compose down -v --remove-orphans
         '''
+    }
+
+    success {
+        echo 'Automation pipeline executed successfully!'
+    }
+
+    failure {
+        echo 'Automation pipeline failed!'
+    }
+
+    unstable {
+        echo 'Automation pipeline is unstable!'
     }
 }
 
