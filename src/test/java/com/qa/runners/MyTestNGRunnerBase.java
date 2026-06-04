@@ -97,7 +97,7 @@ public class MyTestNGRunnerBase {
     }
 
     private void setupAllureEnvironment(String platform, String version, String device) {
-        File allureResultsDir = new File("target/allure-results");
+        File allureResultsDir = new File("allure-results");
         if (!allureResultsDir.exists())
             allureResultsDir.mkdirs();
 
@@ -151,12 +151,15 @@ public class MyTestNGRunnerBase {
 
     private void copyHistoryToResults() {
         File historySource = new File("allure-report/history");
-        File historyDest = new File("target/allure-results/history");
-        if (!historySource.exists()) return;
-        if (!historyDest.exists()) historyDest.mkdirs();
+        File historyDest = new File("allure-results/history");
+        if (!historySource.exists())
+            return;
+        if (!historyDest.exists())
+            historyDest.mkdirs();
         try {
             File[] files = historySource.listFiles();
-            if (files == null) return;
+            if (files == null)
+                return;
             for (File file : files) {
                 Files.copy(file.toPath(),
                         new File(historyDest, file.getName()).toPath(),
@@ -177,7 +180,7 @@ public class MyTestNGRunnerBase {
             }
 
             ProcessBuilder pb = new ProcessBuilder(
-                    allureBin, "generate", "target/allure-results",
+                    allureBin, "generate", "allure-results",
                     "--clean", "-o", "allure-report");
             pb.inheritIO();
             pb.start().waitFor();
@@ -187,7 +190,7 @@ public class MyTestNGRunnerBase {
     }
 
     private void archiveAllureResults() {
-        File sourceDir = new File("target/allure-results");
+        File sourceDir = new File("allure-results");
         File destDir = new File("logs" + File.separator + GlobalParams.getRunTimestamp()
                 + File.separator + "allure-results");
 
@@ -211,7 +214,7 @@ public class MyTestNGRunnerBase {
     }
 
     private void patchAllureResults(String device) {
-        File allureResultsDir = new File("target/allure-results");
+        File allureResultsDir = new File("allure-results");
         if (!allureResultsDir.exists())
             return;
 
