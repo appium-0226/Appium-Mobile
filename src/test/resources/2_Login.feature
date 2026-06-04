@@ -1,4 +1,4 @@
-@simple @login @test
+@simple @login @test @registerLogin
 Feature: Login
   Scenario: Login with valis credentials
     Given Input registered Username

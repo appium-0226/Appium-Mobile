@@ -1,4 +1,4 @@
-@simple @register @test
+@simple @register @test @registerLogin
 Feature: Register
   Scenario: Register New Account
     Given Access Register Page

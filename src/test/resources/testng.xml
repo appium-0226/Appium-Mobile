@@ -13,7 +13,7 @@
         </classes>
     </test>
 
-    <!-- <test name="Pixel 7 Android 14">
+    <test name="Pixel 7 Android 14">
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="14"/>
         <parameter name="deviceName" value="Pixel7Android14"/>
@@ -50,6 +50,6 @@
         <classes>
             <class name="com.qa.runners.MyiOSRunnerTest"/>
         </classes>
-    </test> -->
+    </test>
 
 </suite>

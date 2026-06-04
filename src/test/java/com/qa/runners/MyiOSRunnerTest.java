@@ -13,13 +13,8 @@ import org.testng.annotations.*;
 @CucumberOptions(plugin = {
                 "pretty",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
-                }
-        , features = {"src/test/resources"}
-        , glue = {"com.qa.stepdef"}
-        , dryRun = false
-        , monochrome = true
-        , tags = "@test"
-)
+}, features = { "src/test/resources" }, glue = {
+                "com.qa.stepdef" }, dryRun = false, monochrome = true, tags = "@registerLogin")
 public class MyiOSRunnerTest extends MyTestNGRunnerBase {
 
 }

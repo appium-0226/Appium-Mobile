@@ -14,7 +14,7 @@ import org.testng.annotations.*;
                 "pretty",
                 "io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"
 }, features = { "src/test/resources" }, glue = {
-                "com.qa.stepdef" }, dryRun = false, monochrome = true, tags = "@register")
+                "com.qa.stepdef" }, dryRun = false, monochrome = true, tags = "@registerLogin")
 public class MyAndroidRunnerTest extends MyTestNGRunnerBase {
 
 }
