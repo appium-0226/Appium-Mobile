@@ -44,6 +44,7 @@ stages {
 
     stage('Run Automated Tests') {
         steps {
+            sh 'rm -rf allure-results/*'
             sh '''
             docker compose up --build \
               --remove-orphans \
