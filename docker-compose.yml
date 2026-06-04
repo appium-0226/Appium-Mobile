@@ -22,6 +22,10 @@ services:
       - db_password=${DB_PASSWORD}
       - appiumUrl=${APPIUM_URL}
       - HOST_PWD=${PWD}
+      - PLATFORM=${PLATFORM}
+      - TAGS=${TAGS}
+      - DEVICE_NAME=${DEVICE_NAME}
+      - UDID=${UDID}
     volumes:
       - ./allure-results:/app/allure-results
       - ./logs:/app/logs

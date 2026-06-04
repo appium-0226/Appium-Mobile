@@ -5,6 +5,29 @@ environment {
     PATH = "/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 }
 
+parameters{
+    choice(
+        name:'PLATFORM',
+        choices:['Android','iOS'],
+        description:'Choose Platform'
+    )
+    choice(
+        name:'TAGS',
+        choices:['@test','@registerLogin','@register','@login'],
+        description:'Choose Tags'
+    )
+    choice(
+        name:'Device_Name',
+        choices:['Pixel 8 Android 15','Pixel 7 Android 14','iPhone 17 iOS 262','iPhone 16e iOS 262'],
+        description:'Choose Device'
+    )
+    choice(
+        name:'UDID',
+        choices:['emulator-5554','emulator-5556','7EEF215B-157F-461B-8005-ED0A1EA0A797','16FE4EE3-E692-446F-BC4A-4895448E01FD'],
+        description:'Choose UDID'
+    )
+}
+
 stages {
 
     stage('Checkout Code') {
@@ -38,6 +61,17 @@ stages {
             which docker
             docker --version
             docker compose version
+            '''
+        }
+    }
+
+    stage('Print Build Parameters') {
+        steps{
+            sh '''
+            echo "Platform: ${PLATFORM}"
+            echo "Tags: ${TAGS}"
+            echo "Device Name: ${DEVICE_NAME}"
+            echo "UDID: ${UDID}"
             '''
         }
     }
