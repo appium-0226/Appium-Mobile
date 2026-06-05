@@ -16,33 +16,32 @@ stages {
     stage('Update Jenkins Parameters'){
         steps{
             script{
-                def xmlContent = readFile('src/test/resources/testng.xml')
-                def deviceMathcer = xmlContent =~ /<test name="([^"]+)"/
+                def devicesRaw = sh(
+                    script: "grep -o '<test name=\"[^\"]*\"' src/test/resources/testng.xml | sed 's/<test name=\"//g; s/\"//g'",
+                    returnStdout: true
+                ).trim()
                 def devices = ['ALL']
-                deviceMathcer.each{ match ->
-                devices.add(match[1])
+                if (devicesRaw) {
+                    devices.addAll(devicesRaw.split('\n').toList())
                 }
-                def tagsSet = [] as Set
-                def featureFiles = findFiles(glob: 'src/test/resources/**/*.feature')
-                for (file in featureFiles){
-                    def content = readFile(file.path)
-                    def tagMatcher = content =~ /@[\w-]+/
-                    tagMatcher.each{tag -> 
-                        tagsSet.add(tag)
-                    }
-                }    
-                def tags = tagsSet.toList()
+
+                def tagsRaw = sh(
+                    script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
+                    returnStdout: true
+                ).trim()
+                def tags = tagsRaw ? tagsRaw.split('\n').toList() : ['@test']
+
                 properties([
                     parameters([
                         choice(
                             name: "TAGS",
                             choices: tags,
-                            description: "Choose a Tag"
+                            description: "Choose a Cucumber Tag to run"
                         ),
                         choice(
                             name: "DEVICE_NAME",
                             choices: devices,
-                            description: "Choose a Device"
+                            description: "Choose a Device (ALL = parallel)"
                         )
                     ])
                 ])
