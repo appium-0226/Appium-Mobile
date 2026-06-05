@@ -36,6 +36,43 @@ stages {
         }
     }
 
+    stage('Update Jenkins Parameters'){
+        steps{
+            script{
+                def xmlContent = readFile('src/test/resources/testng.xml')
+                def deviceMathcer = xmlContent =~ /<test name="([^"]+)"/
+                def devices = ['ALL']
+                deviceMathcer.each{ match ->
+                devices.add(match[1])
+                }
+                def tagsSet = [] as Set
+                def featureFiles = findFiles(glob: 'src/test/resources/**/*.feature')
+                for (file in featureFiles){
+                    def content = readFile(file.path)
+                    def tagMatcher = content =~ /@[\w-]+/
+                    tagMatcher.each{tag -> 
+                        tagsSet.add(tag)
+                    }
+                }    
+                def tags = tagsSet.toList()
+                properties([
+                    parameters([
+                        choice(
+                            name: "TAGS",
+                            choices: tags,
+                            description: "Choose a Tag"
+                        ),
+                        choice(
+                            name: "DEVICE_NAME",
+                            choices: devices,
+                            description: "Choose a Device"
+                        )
+                    ])
+                ])
+            }
+        }
+    }
+
     stage('Inject Environment Variables') {
         steps {
             withCredentials([
