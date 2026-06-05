@@ -17,20 +17,20 @@ stages {
         steps {
             script {
 
-                def xml = new XmlParser().parse('src/test/resources/testng.xml')
+                def devicesRaw = sh(
+                    script: """python3 -c "
+import xml.etree.ElementTree as ET
+tree = ET.parse('src/test/resources/testng.xml')
+root = tree.getroot()
+for test in root.findall('test'):
+    name = test.get('name')
+    udid = next((p.get('value') for p in test.findall('parameter') if p.get('name') == 'udid'), '')
+    print(name + '|' + udid)
+""",
+                    returnStdout: true
+                ).trim()
 
-                def devices = ['ALL']
-
-                xml.test.each { test ->
-
-                    def testName = test.@name
-
-                    def udid = test.parameter.find {
-                        it.@name == 'udid'
-                    }?.@value
-
-                    devices.add("${testName}|${udid}")
-                }
+                def devices = ['ALL'] + (devicesRaw ? devicesRaw.split('\n').toList() : [])
 
                 def tagsRaw = sh(
                     script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
@@ -41,13 +41,11 @@ stages {
 
                 properties([
                     parameters([
-
                         choice(
                             name: "TARGET_DEVICE",
                             choices: devices,
                             description: "Choose target device"
                         ),
-
                         choice(
                             name: "TAGS",
                             choices: tags,
