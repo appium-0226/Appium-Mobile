@@ -32,6 +32,7 @@ public class MyTestNGRunnerBase {
     private static final AtomicInteger finishedThreads = new AtomicInteger(0);
     private static final AtomicInteger totalDevices = new AtomicInteger(0);
 
+    private static final ThreadLocal<Boolean> shouldRun = new ThreadLocal<>();
     private static final ThreadLocal<TestNGCucumberRunner> testNGCucumberRunner = new ThreadLocal<>();
 
     private static final ConcurrentHashMap<String, String> threadToDeviceMap = new ConcurrentHashMap<>();
@@ -54,6 +55,14 @@ public class MyTestNGRunnerBase {
             @Optional("Android") String chromeDriverPort,
             @Optional("iOS") String wdaLocalPort,
             @Optional("iOS") String webkitDebugProxyPort) throws Exception {
+
+        String targetUdid = System.getProperty("target.udid", "ALL");
+        if (!targetUdid.equalsIgnoreCase("ALL") && !targetUdid.equals(udid)) {
+            System.out.println("Skipping device initialization: " + deviceName);
+            shouldRun.set(false);
+            return;
+        }
+        shouldRun.set(true);
 
         if (totalDevices.get() == 0) {
             int count = context.getSuite().getXmlSuite().getTests().size();
@@ -112,16 +121,26 @@ public class MyTestNGRunnerBase {
 
     @Test(groups = "cucumber", description = "Runs Cucumber Scenarios", dataProvider = "scenarios")
     public void scenario(PickleWrapper pickle, FeatureWrapper cucumberFeature) {
+        if (!Boolean.TRUE.equals(shouldRun.get())) {
+            return;
+        }
         getRunner().runScenario(pickle.getPickle());
     }
 
     @DataProvider
     public Object[][] scenarios() {
+        if (!Boolean.TRUE.equals(shouldRun.get())) {
+            return new Object[0][0];
+        }
         return getRunner().provideScenarios();
     }
 
     @AfterClass(alwaysRun = true)
     public void tearDownClass() {
+        if (!Boolean.TRUE.equals(shouldRun.get())) {
+            System.out.println("Skipping teardown for non-target devices");
+            return;
+        }
         DriverManager driverManager = new DriverManager();
         if (driverManager.getDriver() != null) {
             driverManager.getDriver().quit();

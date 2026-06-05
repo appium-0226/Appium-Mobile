@@ -13,38 +13,71 @@ stages {
         }
     }
 
-    stage('Update Jenkins Parameters'){
-        steps{
-            script{
-                def devicesRaw = sh(
-                    script: "grep -o '<test name=\"[^\"]*\"' src/test/resources/testng.xml | sed 's/<test name=\"//g; s/\"//g'",
-                    returnStdout: true
-                ).trim()
+    stage('Update Jenkins Parameters') {
+        steps {
+            script {
+
+                def xml = new XmlParser().parse('src/test/resources/testng.xml')
+
                 def devices = ['ALL']
-                if (devicesRaw) {
-                    devices.addAll(devicesRaw.split('\n').toList())
+
+                xml.test.each { test ->
+
+                    def testName = test.@name
+
+                    def udid = test.parameter.find {
+                        it.@name == 'udid'
+                    }?.@value
+
+                    devices.add("${testName}|${udid}")
                 }
 
                 def tagsRaw = sh(
                     script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
                     returnStdout: true
                 ).trim()
+
                 def tags = tagsRaw ? tagsRaw.split('\n').toList() : ['@test']
 
                 properties([
                     parameters([
+
+                        choice(
+                            name: "TARGET_DEVICE",
+                            choices: devices,
+                            description: "Choose target device"
+                        ),
+
                         choice(
                             name: "TAGS",
                             choices: tags,
-                            description: "Choose a Cucumber Tag to run"
-                        ),
-                        choice(
-                            name: "DEVICE_NAME",
-                            choices: devices,
-                            description: "Choose a Device (ALL = parallel)"
+                            description: "Choose cucumber tags"
                         )
                     ])
                 ])
+            }
+        }
+    }
+
+    stage('Extract Device Information') {
+        steps {
+            script {
+
+                if (params.TARGET_DEVICE == 'ALL') {
+
+                    env.TARGET_DEVICE_NAME = 'ALL'
+                    env.TARGET_UDID = 'ALL'
+
+                } else {
+
+                    def parts = params.TARGET_DEVICE.split('\\|')
+
+                    env.TARGET_DEVICE_NAME = parts[0]
+                    env.TARGET_UDID = parts[1]
+                }
+
+                echo "TARGET_DEVICE_NAME=${env.TARGET_DEVICE_NAME}"
+                echo "TARGET_UDID=${env.TARGET_UDID}"
             }
         }
     }
@@ -58,12 +91,15 @@ stages {
                 string(credentialsId: 'APPIUM_URL', variable: 'APPIUM_URL')
             ]) {
 
-                sh '''
+                sh """
                 echo "DB_URL=$DB_URL" > .env
                 echo "DB_USER=$DB_USER" >> .env
                 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
                 echo "APPIUM_URL=$APPIUM_URL" >> .env
-                '''
+                echo "TARGET_UDID=${env.TARGET_UDID}" >> .env
+                echo "TARGET_DEVICE_NAME=${env.TARGET_DEVICE_NAME}" >> .env
+                echo "TAGS=${params.TAGS}" >> .env
+                """
             }
         }
     }
@@ -79,17 +115,26 @@ stages {
     }
 
     stage('Print Build Parameters') {
-        steps{
+        steps {
+            sh """
+            echo "TARGET_DEVICE_NAME=${env.TARGET_DEVICE_NAME}"
+            echo "TARGET_UDID=${env.TARGET_UDID}"
+            echo "TAGS=${params.TAGS}"
+            """
+        }
+    }
+
+    stage('Clean Previous Test Artifacts') {
+        steps {
             sh '''
-            echo "Tags: ${TAGS}"
-            echo "Device Name: ${DEVICE_NAME}"
+            rm -rf allure-results/*
+            rm -rf logs/*
             '''
         }
     }
 
     stage('Run Automated Tests') {
         steps {
-            sh 'rm -rf allure-results/*'
             sh '''
             docker compose up --build \
               --remove-orphans \
