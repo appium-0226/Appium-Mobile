@@ -27,7 +27,17 @@ stages {
                         returnStdout: true
                 ).trim()
 
-                def devices = ['ALL'] + (devicesRaw ? devicesRaw.split('\n').toList() : [])
+                def deviceMap = [:]
+                if (devicesRaw) {
+                    devicesRaw.split('\n').each { line ->
+                        def parts = line.split('\\|')
+                        deviceMap[parts[0].trim()] = parts[1].trim()
+                    }
+                }
+
+                def devices = ['ALL'] + deviceMap.keySet().toList()
+
+                env.DEVICE_MAP = deviceMap.collect { k, v -> "${k}=${v}" }.join(',')
 
                 def tagsRaw = sh(
                         script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
@@ -65,10 +75,14 @@ stages {
 
                 } else {
 
-                    def parts = params.TARGET_DEVICE.split('\\|')
+                    def map = [:]
+                    env.DEVICE_MAP.split(',').each { entry ->
+                        def kv = entry.split('=')
+                        map[kv[0]] = kv[1]
+                    }
 
-                    env.TARGET_DEVICE_NAME = parts[0]
-                    env.TARGET_UDID = parts[1]
+                    env.TARGET_DEVICE_NAME = params.TARGET_DEVICE
+                    env.TARGET_UDID = map[params.TARGET_DEVICE]
                 }
 
                 echo "TARGET_DEVICE_NAME=${env.TARGET_DEVICE_NAME}"
