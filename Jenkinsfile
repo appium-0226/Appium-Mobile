@@ -17,42 +17,38 @@ stages {
         steps {
             script {
 
-                writeFile file: 'parse_testng.py', text: '''
-import xml.etree.ElementTree as ET
-tree = ET.parse("src/test/resources/testng.xml")
-root = tree.getroot()
-for test in root.findall("test"):
-    name = test.get("name")
-    udid = next((p.get("value") for p in test.findall("parameter") if p.get("name") == "udid"), "")
-    print(name + "|" + udid)
-'''
                 def devicesRaw = sh(
-                    script: 'python3 parse_testng.py',
-                    returnStdout: true
+                        script: '''
+                    grep -oP '(?<=<test name=")[^"]+' src/test/resources/testng.xml | while read name; do
+                        udid=$(grep -A20 "name=\"$name\"" src/test/resources/testng.xml | grep -oP '(?<=name="udid" value=")[^"]+' | head -1)
+                        echo "${name}|${udid}"
+                    done
+                ''',
+                        returnStdout: true
                 ).trim()
 
                 def devices = ['ALL'] + (devicesRaw ? devicesRaw.split('\n').toList() : [])
 
                 def tagsRaw = sh(
-                    script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
-                    returnStdout: true
+                        script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
+                        returnStdout: true
                 ).trim()
 
                 def tags = tagsRaw ? tagsRaw.split('\n').toList() : ['@test']
 
                 properties([
-                    parameters([
-                        choice(
-                            name: "TARGET_DEVICE",
-                            choices: devices,
-                            description: "Choose target device"
-                        ),
-                        choice(
-                            name: "TAGS",
-                            choices: tags,
-                            description: "Choose cucumber tags"
-                        )
-                    ])
+                        parameters([
+                                choice(
+                                        name: 'TARGET_DEVICE',
+                                        choices: devices,
+                                        description: 'Choose target device'
+                                ),
+                                choice(
+                                        name: 'TAGS',
+                                        choices: tags,
+                                        description: 'Choose cucumber tags'
+                                )
+                        ])
                 ])
             }
         }
