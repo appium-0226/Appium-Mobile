@@ -18,20 +18,22 @@ stages {
             script {
 
                 def devicesRaw = sh(
-                        script: '''
+                        script: """
                     grep '<test ' src/test/resources/testng.xml | sed 's/.*name="//;s/".*//' | while IFS= read -r name; do
-                        udid=$(grep -A20 "name=\"${name}\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
-                        echo "${name}|${udid}"
+                        udid=\$(grep -A20 "name=\\"\${name}\\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
+                        echo "\${name}|\${udid}"
                     done | grep '|'
-                ''',
+                """,
                         returnStdout: true
                 ).trim()
 
                 def deviceMap = [:]
                 if (devicesRaw) {
                     devicesRaw.split('\n').each { line ->
-                        def parts = line.split('\\|')
-                        deviceMap[parts[0].trim()] = parts[1].trim()
+                        def idx = line.indexOf('|')
+                        if (idx > 0) {
+                            deviceMap[line.substring(0, idx).trim()] = line.substring(idx + 1).trim()
+                        }
                     }
                 }
 
