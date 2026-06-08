@@ -194,7 +194,7 @@ post {
         archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
 
         sh '''
-        docker compose down -v --remove-orphans
+        docker compose down --remove-orphans
         '''
     }
 
