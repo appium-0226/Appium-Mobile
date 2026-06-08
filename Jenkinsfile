@@ -17,16 +17,17 @@ stages {
         steps {
             script {
 
-                def devicesRaw = sh(
-                    script: """python3 -c "
+                writeFile file: 'parse_testng.py', text: '''
 import xml.etree.ElementTree as ET
-tree = ET.parse('src/test/resources/testng.xml')
+tree = ET.parse("src/test/resources/testng.xml")
 root = tree.getroot()
-for test in root.findall('test'):
-    name = test.get('name')
-    udid = next((p.get('value') for p in test.findall('parameter') if p.get('name') == 'udid'), '')
-    print(name + '|' + udid)
-""",
+for test in root.findall("test"):
+    name = test.get("name")
+    udid = next((p.get("value") for p in test.findall("parameter") if p.get("name") == "udid"), "")
+    print(name + "|" + udid)
+'''
+                def devicesRaw = sh(
+                    script: 'python3 parse_testng.py',
                     returnStdout: true
                 ).trim()
 
