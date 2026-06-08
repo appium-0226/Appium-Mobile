@@ -19,10 +19,10 @@ stages {
 
                 def devicesRaw = sh(
                         script: '''
-                    grep -oP '(?<=<test name=")[^"]+' src/test/resources/testng.xml | while read name; do
-                        udid=$(grep -A20 "name=\"$name\"" src/test/resources/testng.xml | grep -oP '(?<=name="udid" value=")[^"]+' | head -1)
+                    grep '<test ' src/test/resources/testng.xml | sed 's/.*name="//;s/".*//' | while read name; do
+                        udid=$(grep -A20 "name=\"$name\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
                         echo "${name}|${udid}"
-                    done
+                    done | grep '|'
                 ''',
                         returnStdout: true
                 ).trim()
