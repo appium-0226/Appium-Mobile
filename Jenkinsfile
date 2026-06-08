@@ -146,22 +146,26 @@ stages {
 
     stage('Run Automated Tests') {
         steps {
-            sh '''
-            docker compose up --build \
-              --remove-orphans \
-              --abort-on-container-exit \
-              --exit-code-from test-runner
-            '''
+            catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                sh '''
+                docker compose up --build \
+                  --remove-orphans \
+                  --abort-on-container-exit \
+                  --exit-code-from test-runner
+                '''
+            }
         }
     }
 
     stage('Publish Allure Report') {
         steps {
-            allure(
-                includeProperties: false,
-                jdk: '',
-                results: [[path: 'allure-results']]
-            )
+            catchError(buildResult: 'FAILURE', stageResult: 'UNSTABLE') {
+                allure(
+                    includeProperties: false,
+                    jdk: '',
+                    results: [[path: 'allure-results']]
+                )
+            }
         }
     }
 }

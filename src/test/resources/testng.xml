@@ -39,7 +39,7 @@
         </classes>
     </test>
 
-    <test name="iPhone16e_iOS262">
+    <test name="iPhone16e_iOS26">
         <parameter name="platformName" value="iOS"/>
         <parameter name="platformVersion" value="26.2"/>
         <parameter name="deviceName" value="iPhone 16e"/>
