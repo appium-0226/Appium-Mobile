@@ -47,6 +47,8 @@ stages {
                 def devices = ['ALL']
                 platformGroups.keySet().sort().each { platform ->
                     devices << platform
+                }
+                platformGroups.keySet().sort().each { platform ->
                     devices.addAll(platformGroups[platform])
                 }
 
