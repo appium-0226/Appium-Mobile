@@ -1,6 +1,6 @@
 <suite name="Suite" parallel="tests" thread-count="4">
 
-    <test name="Pixel 8 Android 15">
+    <test name="Pixel8_Android15">
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="15"/>
         <parameter name="deviceName" value="Pixel8Android15"/>
@@ -13,7 +13,7 @@
         </classes>
     </test>
 
-    <test name="Pixel 7 Android 14">
+    <test name="Pixel7_Android14">
         <parameter name="platformName" value="Android"/>
         <parameter name="platformVersion" value="14"/>
         <parameter name="deviceName" value="Pixel7Android14"/>
@@ -26,7 +26,7 @@
         </classes>
     </test>
 
-    <test name="iPhone 17 iOS 262">
+    <test name="iPhone17_iOS26">
         <parameter name="platformName" value="iOS"/>
         <parameter name="platformVersion" value="26.2"/>
         <parameter name="deviceName" value="iPhone 17"/>
@@ -39,7 +39,7 @@
         </classes>
     </test>
 
-    <test name="iPhone 16e iOS 262">
+    <test name="iPhone16e_iOS262">
         <parameter name="platformName" value="iOS"/>
         <parameter name="platformVersion" value="26.2"/>
         <parameter name="deviceName" value="iPhone 16e"/>
