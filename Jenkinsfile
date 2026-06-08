@@ -19,8 +19,8 @@ stages {
 
                 def devicesRaw = sh(
                         script: '''
-                    grep '<test ' src/test/resources/testng.xml | sed 's/.*name="//;s/".*//' | while read name; do
-                        udid=$(grep -A20 "name=\"$name\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
+                    grep '<test ' src/test/resources/testng.xml | sed 's/.*name="//;s/".*//' | while IFS= read -r name; do
+                        udid=$(grep -A20 "name=\"${name}\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
                         echo "${name}|${udid}"
                     done | grep '|'
                 ''',
@@ -37,7 +37,7 @@ stages {
 
                 def devices = ['ALL'] + deviceMap.keySet().toList()
 
-                env.DEVICE_MAP = deviceMap.collect { k, v -> "${k}=${v}" }.join(',')
+                env.DEVICE_MAP = deviceMap.collect { k, v -> "${k}||${v}" }.join('\n')
 
                 def tagsRaw = sh(
                         script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
@@ -76,9 +76,9 @@ stages {
                 } else {
 
                     def map = [:]
-                    env.DEVICE_MAP.split(',').each { entry ->
-                        def kv = entry.split('=')
-                        map[kv[0]] = kv[1]
+                    env.DEVICE_MAP.split('\n').each { entry ->
+                        def idx = entry.indexOf('||')
+                        map[entry.substring(0, idx)] = entry.substring(idx + 2)
                     }
 
                     env.TARGET_DEVICE_NAME = params.TARGET_DEVICE
