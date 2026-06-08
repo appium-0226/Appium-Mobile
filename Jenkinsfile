@@ -21,25 +21,37 @@ stages {
                         script: """
                     grep '<test ' src/test/resources/testng.xml | sed 's/.*name="//;s/".*//' | while IFS= read -r name; do
                         udid=\$(grep -A20 "name=\\"\${name}\\"" src/test/resources/testng.xml | grep 'name="udid"' | sed 's/.*value="//;s/".*//' | head -1)
-                        echo "\${name}|\${udid}"
+                        platform=\$(grep -A5 "name=\\"\${name}\\"" src/test/resources/testng.xml | grep 'name="platformName"' | sed 's/.*value="//;s/".*//' | head -1)
+                        echo "\${name}|\${udid}|\${platform}"
                     done | grep '|'
                 """,
                         returnStdout: true
                 ).trim()
 
                 def deviceMap = [:]
+                def platformGroups = [:]
                 if (devicesRaw) {
                     devicesRaw.split('\n').each { line ->
-                        def idx = line.indexOf('|')
-                        if (idx > 0) {
-                            deviceMap[line.substring(0, idx).trim()] = line.substring(idx + 1).trim()
+                        def parts = line.split('\\|')
+                        if (parts.size() == 3) {
+                            def name = parts[0].trim()
+                            def udid = parts[1].trim()
+                            def platform = parts[2].trim()
+                            deviceMap[name] = udid
+                            if (!platformGroups[platform]) platformGroups[platform] = []
+                            platformGroups[platform] << name
                         }
                     }
                 }
 
-                def devices = ['ALL'] + deviceMap.keySet().toList()
+                def devices = ['ALL']
+                platformGroups.keySet().sort().each { platform ->
+                    devices << platform
+                    devices.addAll(platformGroups[platform])
+                }
 
                 env.DEVICE_MAP = deviceMap.collect { k, v -> "${k}||${v}" }.join('\n')
+                env.PLATFORM_MAP = platformGroups.collect { plat, names -> "${plat}||${names.join(',')}" }.join('\n')
 
                 def tagsRaw = sh(
                         script: "grep -roh '@[a-zA-Z0-9_-]*' src/test/resources/ --include='*.feature' | sort -u",
@@ -71,18 +83,20 @@ stages {
             script {
 
                 if (params.TARGET_DEVICE == 'ALL') {
-
                     env.TARGET_DEVICE_NAME = 'ALL'
                     env.TARGET_UDID = 'ALL'
 
-                } else {
+                } else if (params.TARGET_DEVICE == 'Android' || params.TARGET_DEVICE == 'iOS') {
+                    env.TARGET_DEVICE_NAME = params.TARGET_DEVICE
+                    env.TARGET_UDID = 'ALL'
+                    env.TARGET_PLATFORM = params.TARGET_DEVICE
 
+                } else {
                     def map = [:]
                     env.DEVICE_MAP.split('\n').each { entry ->
                         def idx = entry.indexOf('||')
                         map[entry.substring(0, idx)] = entry.substring(idx + 2)
                     }
-
                     env.TARGET_DEVICE_NAME = params.TARGET_DEVICE
                     env.TARGET_UDID = map[params.TARGET_DEVICE]
                 }
@@ -109,6 +123,7 @@ stages {
                 echo "APPIUM_URL=$APPIUM_URL" >> .env
                 echo "TARGET_UDID=${env.TARGET_UDID}" >> .env
                 echo "TARGET_DEVICE_NAME=${env.TARGET_DEVICE_NAME}" >> .env
+                echo "TARGET_PLATFORM=${env.TARGET_PLATFORM ?: 'ALL'}" >> .env
                 echo "TAGS=${params.TAGS}" >> .env
                 """
             }

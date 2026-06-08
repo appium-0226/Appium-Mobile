@@ -8,5 +8,5 @@ RUN mvn dependency:go-offline -B
 
 COPY . .
 
-CMD ["sh", "-c", "mvn clean test -Dtarget.udid=$TARGET_UDID -Dcucumber.filter.tags=$TAGS"]
+CMD ["sh", "-c", "mvn clean test -Dtarget.udid=$TARGET_UDID -Dtarget.platform=$TARGET_PLATFORM -Dcucumber.filter.tags=$TAGS"]
 

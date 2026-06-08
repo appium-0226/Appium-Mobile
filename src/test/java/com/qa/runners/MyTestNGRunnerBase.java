@@ -57,7 +57,12 @@ public class MyTestNGRunnerBase {
             @Optional("iOS") String webkitDebugProxyPort) throws Exception {
 
         String targetUdid = System.getProperty("target.udid", "ALL");
-        if (!targetUdid.equalsIgnoreCase("ALL") && !targetUdid.equals(udid)) {
+        String targetPlatform = System.getProperty("target.platform", "ALL");
+
+        boolean udidMatch = targetUdid.equalsIgnoreCase("ALL") || targetUdid.equals(udid);
+        boolean platformMatch = targetPlatform.equalsIgnoreCase("ALL") || targetPlatform.equalsIgnoreCase(platformName);
+
+        if (!udidMatch || !platformMatch) {
             System.out.println("Skipping device initialization: " + deviceName);
             shouldRun.set(false);
             return;

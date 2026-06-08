@@ -24,6 +24,7 @@ services:
       - HOST_PWD=${PWD}
       - TARGET_UDID=${TARGET_UDID}
       - TARGET_DEVICE_NAME=${TARGET_DEVICE_NAME}
+      - TARGET_PLATFORM=${TARGET_PLATFORM}
       - TAGS=${TAGS}
     volumes:
       - ./allure-results:/app/allure-results
