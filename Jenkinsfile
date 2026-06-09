@@ -203,10 +203,10 @@ post {
     success {
         echo 'Automation pipeline executed successfully!'
 
-        withCredentials({
-            string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN')
-            string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
-        }) {
+        withCredentials([
+                string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
+                string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
+        ]) {
             sh """
             curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
@@ -219,6 +219,7 @@ post {
                 Device:${env.TARGET_DEVICE_NAME}
                 
                 Report: ${BUILD_URL}allure
+                "
             """
         }
     }
@@ -226,10 +227,10 @@ post {
     failure {
         echo 'Automation pipeline failed!'
 
-        withCredentials({
-            string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN')
-            string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
-        }) {
+        withCredentials([
+                string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
+                string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
+        ]) {
             sh """
             curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
             -d chat_id="${TELEGRAM_CHAT_ID}" \
@@ -241,6 +242,7 @@ post {
                 Device:${env.TARGET_DEVICE_NAME}
                 
                 Report: ${BUILD_URL}allure
+                "
             """
         }
     }
