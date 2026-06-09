@@ -115,7 +115,9 @@ stages {
                 string(credentialsId: 'DB_URL', variable: 'DB_URL'),
                 string(credentialsId: 'DB_USER', variable: 'DB_USER'),
                 string(credentialsId: 'DB_PASSWORD', variable: 'DB_PASSWORD'),
-                string(credentialsId: 'APPIUM_URL', variable: 'APPIUM_URL')
+                string(credentialsId: 'APPIUM_URL', variable: 'APPIUM_URL'),
+                string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
+                string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
             ]) {
 
                 sh """
@@ -200,10 +202,39 @@ post {
 
     success {
         echo 'Automation pipeline executed successfully!'
+
+        sh '''
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
+        -d chat_id="${TELEGRAM_CHAT_ID}"
+        -d text="
+            ✅ Automation Success
+            
+            Project:${JOB_NAME}
+            Build Number:${BUILD_NUMBER}
+            Tags:${params.TAGS}
+            Device:${env.TARGET_DEVICE_NAME}
+            
+            Report: ${BUILD_URL}allure
+        "
+        '''
     }
 
     failure {
         echo 'Automation pipeline failed!'
+
+        sh '''
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
+        -d chat_id="${TELEGRAM_CHAT_ID}"
+        -d text="
+            ❌ Automation Failed
+            Project:${JOB_NAME}
+            Build Number:${BUILD_NUMBER}
+            Tags:${params.TAGS}
+            Device:${env.TARGET_DEVICE_NAME}
+            
+            Report: ${BUILD_URL}allure
+        "
+        '''
     }
 
     unstable {
