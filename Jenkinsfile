@@ -241,7 +241,7 @@ post {
 <b>Device</b> : $TARGET_DEVICE_NAME
 <b>Tags</b> : $TAGS
 
-<b>Duration</b> : $BUILD_DURATION.replace(' and counting', '')
+<b>Duration</b> : ${currentBuild.durationString.replace(' and counting', '')}
 
 📊 <b>Allure Report</b> :
 ${BUILD_URL}allure
@@ -275,7 +275,7 @@ ${BUILD_URL}allure
 <b>Device</b> : $TARGET_DEVICE_NAME
 <b>Tags</b> : $TAGS
 
-<b>Duration</b> : $BUILD_DURATION.replace(' and counting', '')
+<b>Duration</b> : ${currentBuild.durationString.replace(' and counting', '')}
 
 📊 <b>Allure Report</b> :
 ${BUILD_URL}allure
