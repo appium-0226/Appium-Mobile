@@ -13,6 +13,18 @@ stages {
         }
     }
 
+    stage('Detect Trigger') {
+        steps {
+            script {
+                def causes = currentBuild.getBuildCauses()
+
+                env.BUILD_TRIGGER = causes[0].shortDescription
+
+                echo "BUILD_TRIGGER=${env.BUILD_TRIGGER}"
+            }
+        }
+    }
+
     stage('Update Jenkins Parameters') {
         steps {
             script {
@@ -207,20 +219,27 @@ post {
                 string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
                 string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
         ]) {
+
             sh """
-            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="
-                ✅ Automation Success
-                
-                Project:${JOB_NAME}
-                Build Number:${BUILD_NUMBER}
-                Tags:${params.TAGS}
-                Device:${env.TARGET_DEVICE_NAME}
-                
-                Report: ${BUILD_URL}allure
-                "
-            """
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TELEGRAM_CHAT_ID}" \
+        -d parse_mode="Markdown" \
+        -d text="✅ *Automation Success*
+
+*Project* : ${JOB_NAME}
+*Build* : #${BUILD_NUMBER}
+*Branch* : ${GIT_BRANCH}
+*Trigger* : ${env.BUILD_TRIGGER}
+
+*Device* : ${env.TARGET_DEVICE_NAME}
+*Tags* : ${params.TAGS}
+
+*Duration* : ${currentBuild.durationString}
+
+📊 *Allure Report* :
+${BUILD_URL}allure
+"
+        """
         }
     }
 
@@ -231,22 +250,29 @@ post {
                 string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
                 string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
         ]) {
+
             sh """
-            curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d text="
-                ❌ Automation Failed
-                Project:${JOB_NAME}
-                Build Number:${BUILD_NUMBER}
-                Tags:${params.TAGS}
-                Device:${env.TARGET_DEVICE_NAME}
-                
-                Report: ${BUILD_URL}allure
-                "
-            """
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TELEGRAM_CHAT_ID}" \
+        -d parse_mode="Markdown" \
+        -d text="❌ *Automation Failed*
+
+*Project* : ${JOB_NAME}
+*Build* : #${BUILD_NUMBER}
+*Branch* : ${GIT_BRANCH}
+*Trigger* : ${env.BUILD_TRIGGER}
+
+*Device* : ${env.TARGET_DEVICE_NAME}
+*Tags* : ${params.TAGS}
+
+*Duration* : ${currentBuild.durationString}
+
+📊 *Allure Report* :
+${BUILD_URL}allure
+"
+        """
         }
     }
-
     unstable {
         echo 'Automation pipeline is unstable!'
     }
