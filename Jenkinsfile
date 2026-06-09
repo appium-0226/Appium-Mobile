@@ -203,9 +203,9 @@ post {
     success {
         echo 'Automation pipeline executed successfully!'
 
-        sh '''
-        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
-        -d chat_id="${TELEGRAM_CHAT_ID}"
+        sh """
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TELEGRAM_CHAT_ID}" \
         -d text="
             ✅ Automation Success
             
@@ -216,15 +216,15 @@ post {
             
             Report: ${BUILD_URL}allure
         "
-        '''
+        """
     }
 
     failure {
         echo 'Automation pipeline failed!'
 
-        sh '''
-        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage"
-        -d chat_id="${TELEGRAM_CHAT_ID}"
+        sh """
+        curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+        -d chat_id="${TELEGRAM_CHAT_ID}" \
         -d text="
             ❌ Automation Failed
             Project:${JOB_NAME}
@@ -234,7 +234,7 @@ post {
             
             Report: ${BUILD_URL}allure
         "
-        '''
+        """
     }
 
     unstable {
