@@ -72,7 +72,7 @@ stages {
                                 choice(
                                         name: 'TAGS',
                                         choices: tags,
-                                        description: 'Choose cucumber tags'
+                                        description: 'Choose cucumber tag'
                                 )
                         ])
                 ])
