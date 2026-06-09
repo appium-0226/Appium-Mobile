@@ -200,37 +200,33 @@ stages {
         }
     }
 
-    stage('Set Build Duration') {
-        steps {
-            script {
-                env.BUILD_DURATION = currentBuild.durationString
-            }
-        }
-    }
-
 }
+    post {
 
-post {
+        always {
 
-    always {
-
-        archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
-
-        sh '''
-        docker compose down --remove-orphans
-        '''
-    }
-
-    success {
-        echo 'Automation pipeline executed successfully!'
-
-        withCredentials([
-                string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
-                string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
-        ]) {
+            archiveArtifacts artifacts: 'logs/**', allowEmptyArchive: true
 
             sh '''
-        MESSAGE="
+        docker compose down --remove-orphans
+        '''
+        }
+
+        success {
+
+            script {
+                env.BUILD_DURATION_CLEAN = currentBuild.durationString.replace(' and counting', '')
+            }
+
+            echo 'Automation pipeline executed successfully!'
+
+            withCredentials([
+                    string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
+                    string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
+            ]) {
+
+                sh '''
+            MESSAGE="
 ✅ <b>Automation Success</b>
 
 <b>Project</b> : $JOB_NAME
@@ -239,32 +235,37 @@ post {
 <b>Trigger</b> : $BUILD_TRIGGER
 
 <b>Device</b> : $TARGET_DEVICE_NAME
-<b>Tags</b> : $TAGS
+<b>Tags</b> : '"${TAGS}"'
 
-<b>Duration</b> : ${currentBuild.durationString.replace(' and counting', '')}
+<b>Duration</b> : $BUILD_DURATION_CLEAN
 
 📊 <b>Allure Report</b> :
 ${BUILD_URL}allure
 "
 
-        curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
-        -d chat_id="$TELEGRAM_CHAT_ID" \
-        -d parse_mode="HTML" \
-        --data-urlencode text="$MESSAGE"
-        '''
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d parse_mode="HTML" \
+            --data-urlencode text="$MESSAGE"
+            '''
+            }
         }
-    }
 
-    failure {
-        echo 'Automation pipeline failed!'
+        failure {
 
-        withCredentials([
-                string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
-                string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
-        ]) {
+            script {
+                env.BUILD_DURATION_CLEAN = currentBuild.durationString.replace(' and counting', '')
+            }
 
-            sh '''
-        MESSAGE="
+            echo 'Automation pipeline failed!'
+
+            withCredentials([
+                    string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'TELEGRAM_BOT_TOKEN'),
+                    string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'TELEGRAM_CHAT_ID')
+            ]) {
+
+                sh '''
+            MESSAGE="
 ❌ <b>Automation Failed</b>
 
 <b>Project</b> : $JOB_NAME
@@ -273,25 +274,25 @@ ${BUILD_URL}allure
 <b>Trigger</b> : $BUILD_TRIGGER
 
 <b>Device</b> : $TARGET_DEVICE_NAME
-<b>Tags</b> : $TAGS
+<b>Tags</b> : '"${TAGS}"'
 
-<b>Duration</b> : ${currentBuild.durationString.replace(' and counting', '')}
+<b>Duration</b> : $BUILD_DURATION_CLEAN
 
 📊 <b>Allure Report</b> :
 ${BUILD_URL}allure
 "
 
-        curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
-        -d chat_id="$TELEGRAM_CHAT_ID" \
-        -d parse_mode="HTML" \
-        --data-urlencode text="$MESSAGE"
-        '''
+            curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
+            -d chat_id="$TELEGRAM_CHAT_ID" \
+            -d parse_mode="HTML" \
+            --data-urlencode text="$MESSAGE"
+            '''
+            }
+        }
+
+        unstable {
+            echo 'Automation pipeline is unstable!'
         }
     }
-
-    unstable {
-        echo 'Automation pipeline is unstable!'
-    }
-}
 
 }
