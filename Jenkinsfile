@@ -230,25 +230,27 @@ post {
         ]) {
 
             sh '''
+        MESSAGE="
+✅ <b>Automation Success</b>
+
+<b>Project</b> : $JOB_NAME
+<b>Build</b> : #$BUILD_NUMBER
+<b>Branch</b> : $GIT_BRANCH
+<b>Trigger</b> : $BUILD_TRIGGER
+
+<b>Device</b> : $TARGET_DEVICE_NAME
+<b>Tags</b> : $TAGS
+
+<b>Duration</b> : $BUILD_DURATION
+
+📊 <b>Allure Report</b> :
+${BUILD_URL}allure
+"
+
         curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
         -d chat_id="$TELEGRAM_CHAT_ID" \
         -d parse_mode="HTML" \
-        -d text="
-✅ <b>Automation Success</b>
-
-<b>Project</b> : '"$JOB_NAME"'
-<b>Build</b> : #'"$BUILD_NUMBER"'
-<b>Branch</b> : '"$GIT_BRANCH"'
-<b>Trigger</b> : '"$BUILD_TRIGGER"'
-
-<b>Device</b> : '"$TARGET_DEVICE_NAME"'
-<b>Tags</b> : '"$TAGS"'
-
-<b>Duration</b> : '"$BUILD_DURATION"'
-
-📊 <b>Allure Report</b> :
-'"$BUILD_URL"'allure
-"
+        --data-urlencode text="$MESSAGE"
         '''
         }
     }
@@ -262,28 +264,31 @@ post {
         ]) {
 
             sh '''
+        MESSAGE="
+❌ <b>Automation Failed</b>
+
+<b>Project</b> : $JOB_NAME
+<b>Build</b> : #$BUILD_NUMBER
+<b>Branch</b> : $GIT_BRANCH
+<b>Trigger</b> : $BUILD_TRIGGER
+
+<b>Device</b> : $TARGET_DEVICE_NAME
+<b>Tags</b> : $TAGS
+
+<b>Duration</b> : $BUILD_DURATION
+
+📊 <b>Allure Report</b> :
+${BUILD_URL}allure
+"
+
         curl -s -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/sendMessage" \
         -d chat_id="$TELEGRAM_CHAT_ID" \
         -d parse_mode="HTML" \
-        -d text="
-❌ <b>Automation Failed</b>
-
-<b>Project</b> : '"$JOB_NAME"'
-<b>Build</b> : #'"$BUILD_NUMBER"'
-<b>Branch</b> : '"$GIT_BRANCH"'
-<b>Trigger</b> : '"$BUILD_TRIGGER"'
-
-<b>Device</b> : '"$TARGET_DEVICE_NAME"'
-<b>Tags</b> : '"$TAGS"'
-
-<b>Duration</b> : '"$BUILD_DURATION"'
-
-📊 <b>Allure Report</b> :
-'"$BUILD_URL"'allure
-"
+        --data-urlencode text="$MESSAGE"
         '''
         }
     }
+
     unstable {
         echo 'Automation pipeline is unstable!'
     }
